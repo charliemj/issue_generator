@@ -1,3 +1,4 @@
+/////////////////Spec///////////////////////
 //given a google spreadsheet of issue dates, generates folders and appropriate docs for each issue in a given drive
 //each folder should have permissions as specified in a "Permissions" google sheet
 //each issue folder will be named N_issueNumber_ and have a spreadsheet of the same title inside
@@ -9,7 +10,7 @@
 
 
 //Given a Google Drive Account
-//A spreadsheet in the top level directory will contain info about issue numbers, dates, and special notes
+//A spreadsheet in the top level directory will contain info about issue numbers, dates, and special notes (MasterSpreadsheet)
 //A script attached to this master spreadsheet will generate a folder for each issue.
     //Inside each folder there will be a master spread sheet for content for the issue
 //Inside the top level dir, there will be a folder for each Content Dept
@@ -21,3 +22,41 @@
         //If there are recurring docs like sports blitz and inshorts, these docs should be created
         //and linked to in the issue folder. Would be cool if these were templated and had useful
         //reference links at the top of the doc
+
+/////////////////End of Spec///////////////////////
+
+
+
+function issueGenereration() {
+    //link: https://docs.google.com/spreadsheets/d/1O7fhTRFU7hp2WhzvhQ90UZek0VNDMKciy66tP1JTPwE/edit#gid=0
+    var MasterSpreadsheetId ="1O7fhTRFU7hp2WhzvhQ90UZek0VNDMKciy66tP1JTPwE"; //The Master sheet with issue info
+
+}
+
+//makes the top level folder a given issue
+function genIssue(){}
+
+//all of these need to be linked back to the Master Spreadsheet for the given issue
+function genSports(){}
+function genArts(){}
+function genNews(){}
+function genScience(){}
+function genCampusLife(){}
+function genOpinion(){}
+function genPhoto(){}
+function genFun(){}
+
+
+
+
+
+
+
+
+
+
+
+
+
+//Resources used:
+//https://developers.google.com/sheets/api/quickstart/apps-script
