@@ -26,10 +26,16 @@
 /////////////////End of Spec///////////////////////
 
 
-
+//the MasterSpreadSheet should have the following form: Issue Number, Issue Date, Special Notes
 function issueGenereration() {
     //link: https://docs.google.com/spreadsheets/d/1O7fhTRFU7hp2WhzvhQ90UZek0VNDMKciy66tP1JTPwE/edit#gid=0
     var MasterSpreadsheetId ="1O7fhTRFU7hp2WhzvhQ90UZek0VNDMKciy66tP1JTPwE"; //The Master sheet with issue info
+    //go to sheet, get all the issues and make an object for each issue with number, date, and notes
+    //var issues =;
+    //for each issue, make a folder with the name being the number of the issue, maintain a list
+    //of these issue_folders. For each folder, make an eic_spread_sheet
+        //the issue object should be updated to have an id for the folder and eic_spreadsheet associated with it
+    //generate each of the department folders, top level "News"
 
 }
 
@@ -37,9 +43,14 @@ function issueGenereration() {
 function genIssue(){}
 
 //all of these need to be linked back to the Master Spreadsheet for the given issue
+//whenever a spreadsheet is updated in the below categories, the master spreadsheet should
+//be updated. Basically insert a row below section head?
 function genSports(){}
 function genArts(){}
-function genNews(){}
+function genNews(){
+    //for each issue, create a folder named the number of the issue
+    //inside each folder have a dept_spreadsheet
+}
 function genScience(){}
 function genCampusLife(){}
 function genOpinion(){}
