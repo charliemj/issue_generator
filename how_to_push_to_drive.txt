@@ -1,0 +1,1 @@
+cd into project directory, gapps upload to push scripts to google drive.
