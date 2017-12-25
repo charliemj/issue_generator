@@ -28,10 +28,13 @@
 
 //the MasterSpreadSheet should have the following form: Issue Number, Issue Date, Special Notes
 function issueGenereration() {
-    //link: https://docs.google.com/spreadsheets/d/1O7fhTRFU7hp2WhzvhQ90UZek0VNDMKciy66tP1JTPwE/edit#gid=0
-    var MasterSpreadsheetId ="1O7fhTRFU7hp2WhzvhQ90UZek0VNDMKciy66tP1JTPwE"; //The Master sheet with issue info
+    var ss = SpreadsheetApp.getActiveSpreadsheet(); //gets the SpreadSheet this script is attached to
+    var issueSheet = ss.getSheets()[0]; //could also do ss.getSheetByName("issues");
+    var departmentsSheet = ss.getSheets()[1]; //could also do ss.getSheetByName("departments");
+
     //go to sheet, get all the issues and make an object for each issue with number, date, and notes
-    //var issues =;
+    var allIssues = getAllIssues(issueSheet);
+
     //for each issue, make a folder with the name being the number of the issue, maintain a list
     //of these issue_folders. For each folder, make an eic_spread_sheet
         //the issue object should be updated to have an id for the folder and eic_spreadsheet associated with it
@@ -39,8 +42,45 @@ function issueGenereration() {
 
 }
 
+//precondition: issueSpreadsheet has 3 columns in this order: issueDate, issueNumber, issueNotes
+//this means it expects 3 columns and a row for each issue
+function getAllIssues(issueSpreadsheet){
+
+    //getSheetValues(startRow, startColumn, numRows, numColumns)
+    var sr = 2;
+    var sc = 1;
+    var numRows = issueSpreadsheet.getLastRow();
+    var numColumns = 3; //assert equals issueSpreadsheet.getLastColumn()?
+
+    //a two-dimension array Object[][]
+    var allIssuesInfo = issueSpreadsheet.getSheetValues(sr,sc,numRows,numColumns);
+
+    //a dictionary of Issue "objects" containing all the info about each issue
+    var allIssues = [];
+
+    for (var row = 1; row <= numRows; row++){
+        //each row is an issue
+        var issueDate = allIssuesInfo[row][1];
+        var issueNumber = allIssuesInfo[row][2];
+        var issueInfo = allIssuesInfo[row][3];
+
+        var issue = {
+            "date":issueDate,
+            "number":issueNumber,
+            "info":issueInfo
+        };
+
+        allIssue.push(issue);
+
+    }
+    return allIssues;
+}
+
+//TODO: need a way to detect changes to the master spreadsheet which will propagate updated
+//notes and/or additional issues and respective folders to all the dept folders + sheets
+
 //makes the top level folder a given issue
-function genIssue(){}
+function genGivenIssue(issueNumber){}
 
 //all of these need to be linked back to the Master Spreadsheet for the given issue
 //whenever a spreadsheet is updated in the below categories, the master spreadsheet should
