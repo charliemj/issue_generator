@@ -58,30 +58,29 @@ function issueGenereration() {
         var issueDate = issue.date;
         var issueInfo = issue.info;
 
-
         makeMasterIssueFolder(volumeFolder,issueNum);
 
-        var sports = makeFolderInVolume(volumeFolder,"sports");
+        //makeFolderInVolume(parent, folderName) and genSports(issueNum, parent)
+        var sports = makeFolderInVolume(volumeFolder,"Sports");
         genSports(issueNum, sports);
-        var arts = makeFolderInVolume(volumeFolder,"arts");
+        var arts = makeFolderInVolume(volumeFolder,"Arts");
         genArts(issueNum, arts);
-        var news = makeFolderInVolume(volumeFolder,"news");
+        var news = makeFolderInVolume(volumeFolder,"News");
         genNews(issueNum, news);
-        var features = makeFolderInVolume(volumeFolder,"features");
+        var features = makeFolderInVolume(volumeFolder,"Features");
         genFeatures(issueNum, features);
-        var opinion = makeFolderInVolume(volumeFolder,"opinion");
+        var opinion = makeFolderInVolume(volumeFolder,"Opinion");
         genOpinion(issueNum, opinion);
-        var fun = makeFolderInVolume(volumeFolder,"fun");
+        var fun = makeFolderInVolume(volumeFolder,"Fun");
         genFun(issueNum, fun);
-        var photo = makeFolderInVolume(volumeFolder,"photo");
+        var photo = makeFolderInVolume(volumeFolder,"Photo");
         genPhoto(issueNum, photo);
-        var campusLife = makeFolderInVolume(volumeFolder,"campus_life");
+        var campusLife = makeFolderInVolume(volumeFolder,"Campus Life");
         genCampusLife(issueNum, campusLife);
-        var science = makeFolderInVolume(volumeFolder,"science");
+        var science = makeFolderInVolume(volumeFolder,"Science");
         genScience(issueNum, science);
 
     }
-
 
     //for each issue, make a folder with the name being the number of the issue, maintain a list
     //of these issue_folders. For each folder, make an eic_spread_sheet
@@ -130,38 +129,44 @@ function getAllIssues(issueSpreadsheet){
 //be updated. Basically insert a row below section head?
 function genSports(issueNum, parent){
     var dept = "sports";
-    makeSectionIssueFolder(parent,dept,issueNum);
-    //makeSportsBlitz("Inshorts for "+name, theJustMadeSportsIssueFolder);
+    madeFolder = makeSectionIssueFolder(parent,dept,issueNum);
+    makeSportsBlitz("Sports Blitz for "+issueNum, madeFolder);
+    //TODO: connect Sports Blitz with the spreadsheet
 }
+
 function genArts(issueNum, parent){
     var dept = "arts";
     makeSectionIssueFolder(parent,dept,issueNum);
     //arts spreadsheet might be good to note any embargo
 }
+
 function genNews(issueNum, parent){
     var dept = "news";
-    makeSectionIssueFolder(parent,dept,issueNum);
-    //for each issue, create a folder named the number of the issue
-    //inside each folder have a dept_spreadsheet
-
-    //makeInshort("Inshorts for "+name, theJustMadeNewsIssueFolder);
+    madeFolder = makeSectionIssueFolder(parent,dept,issueNum);
+    makeInshorts("Inshorts for "+issueNum, madeFolder);
+    //TODO: connect inshorts with the spreadsheet
 }
+
 function genScience(issueNum, parent){
     var dept = "science";
     makeSectionIssueFolder(parent,dept,issueNum);
 }
+
 function genCampusLife(issueNum, parent){
     var dept = "campus_life";
     makeSectionIssueFolder(parent,dept,issueNum);
 }
+
 function genOpinion(issueNum, parent){
     var dept = "opinion";
     makeSectionIssueFolder(parent,dept,issueNum);
 }
+
 function genPhoto(issueNum, parent){
     var dept = "photo";
     makeSectionIssueFolder(parent,dept,issueNum);
 } //photospread sheet
+
 function genFun(issueNum, parent){
     var dept = "fun";
     makeSectionIssueFolder(parent,dept,issueNum);
@@ -191,7 +196,7 @@ function makeFolderInVolume(parent, folderName){
 
 function makeMasterIssueSpreadsheet(issueNum, destinationFolder){
     //https://developers.google.com/apps-script/reference/drive/file#makeCopy(String,Folder)
-    masterIssueSpreadsheetTemplate.makeCopy(issueNum+"_eic_master_spreadsheet",destinationFolder);
+    return masterIssueSpreadsheetTemplate.makeCopy(issueNum+"_eic_master_spreadsheet",destinationFolder);
 }
 
 function makeSectionIssueFolder(parent,dept,issueNum){
@@ -200,12 +205,12 @@ function makeSectionIssueFolder(parent,dept,issueNum){
 }
 
 function makeSectionSpreadsheet(issueNum, dept, destinationFolder){
-    sectionSpreadsheet.copy(issueNum+"_"+dept, destinationFolder);
+    return sectionSpreadsheet.copy(issueNum+"_"+dept, destinationFolder);
 }
 
 function makeIssueNotesDoc(){}
 
-function makeInshort(issueNum, destinationFolder){
+function makeInshorts(issueNum, destinationFolder){
     //make a copy of the Inshort doc
     //and add it to current folder
     //write the editable link to the news spreadsheet
