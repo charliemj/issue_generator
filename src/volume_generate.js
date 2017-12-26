@@ -26,6 +26,18 @@
 /////////////////End of Spec///////////////////////
 
 
+//for updating master on update of section: https://developers.google.com/apps-script/guides/triggers/events
+//https://developers.google.com/apps-script/guides/triggers/#onedit
+//https://developers.google.com/apps-script/reference/script/spreadsheet-trigger-builder#onChange()
+//
+// // var sheet = SpreadsheetApp.getActive();
+//  ScriptApp.newTrigger("myFunction")
+//    .forSpreadsheet(sheet)
+//    .onChange()
+//    .create();
+
+
+
 //the MasterSpreadSheet should have the following form: Issue Number, Issue Date, Special Notes
 //precondition: there exists a spreadsheet called "eic_sheet_template" that has the master sheet template
 //Also assumes there is a sectionSpreadsheet named "section_spreadsheet_template"
@@ -196,7 +208,7 @@ function makeFolderInVolume(parent, folderName){
 
 function makeMasterIssueSpreadsheet(issueNum, destinationFolder){
     //https://developers.google.com/apps-script/reference/drive/file#makeCopy(String,Folder)
-    return masterIssueSpreadsheetTemplate.makeCopy(issueNum+"_eic_master_spreadsheet",destinationFolder);
+    masterIssueSpreadsheetTemplate.makeCopy(issueNum+"_eic_master_spreadsheet",destinationFolder);
 }
 
 function makeSectionIssueFolder(parent,dept,issueNum){
@@ -205,7 +217,7 @@ function makeSectionIssueFolder(parent,dept,issueNum){
 }
 
 function makeSectionSpreadsheet(issueNum, dept, destinationFolder){
-    return sectionSpreadsheet.copy(issueNum+"_"+dept, destinationFolder);
+    sectionSpreadsheet.copy(issueNum+"_"+dept, destinationFolder);
 }
 
 function makeIssueNotesDoc(){}
