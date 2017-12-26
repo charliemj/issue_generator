@@ -30,8 +30,10 @@
 //https://developers.google.com/apps-script/guides/triggers/#onedit
 //https://developers.google.com/apps-script/reference/script/spreadsheet-trigger-builder#onChange()
 //
+//
+///// would want the below trigger on each of the sectionIssue sheets
 // // var sheet = SpreadsheetApp.getActive();
-//  ScriptApp.newTrigger("myFunction")
+//  ScriptApp.newTrigger("myFunction") //<-- in this function do the chaining
 //    .forSpreadsheet(sheet)
 //    .onChange()
 //    .create();
