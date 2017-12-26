@@ -26,25 +26,12 @@
 /////////////////End of Spec///////////////////////
 
 
-//for updating master on update of section: https://developers.google.com/apps-script/guides/triggers/events
-//https://developers.google.com/apps-script/guides/triggers/#onedit
-//https://developers.google.com/apps-script/reference/script/spreadsheet-trigger-builder#onChange()
-//
-//
-///// would want the below trigger on each of the sectionIssue sheets
-// // var sheet = SpreadsheetApp.getActive();
-//  ScriptApp.newTrigger("myFunction") //<-- in this function do the chaining
-//    .forSpreadsheet(sheet)
-//    .onChange()
-//    .create();
-
-
-
 //the MasterSpreadSheet should have the following form: Issue Number, Issue Date, Special Notes
 //precondition: there exists a spreadsheet called "eic_sheet_template" that has the master sheet template
 //Also assumes there is a sectionSpreadsheet named "section_spreadsheet_template"
 function issueGenereration() {
 
+    //look ss by name
     var ss = SpreadsheetApp.getActiveSpreadsheet(); //gets the SpreadSheet this script is attached to
     var issueSheet = ss.getSheets()[0]; //could also do ss.getSheetByName("issues");
     var departmentsSheet = ss.getSheets()[1]; //could also do ss.getSheetByName("departments");
@@ -136,6 +123,44 @@ function getAllIssues(issueSpreadsheet){
 
 //TODO: need a way to detect changes to the master spreadsheet which will propagate updated
 //notes and/or additional issues and respective folders to all the dept folders + sheets
+
+
+//for updating master on update of section: https://developers.google.com/apps-script/guides/triggers/events
+//https://developers.google.com/apps-script/guides/triggers/#onedit
+//
+//
+///// would want the below trigger on each of the sectionIssue sheets
+// // var sheet = SpreadsheetApp.getActive();
+//  ScriptApp.newTrigger("myFunction") //<-- in this function do the chaining
+//    .forSpreadsheet(sheet)
+//    .onOpen()
+//    .create();
+
+//++
+//BEST PLAN: attach triggers to Master Folders to pull content, AND every 5 minutes it pulls
+
+function pullFromSection(issueNum){
+    //go to each section and then that section's issueNum folder and spreadsheet
+    //make sure all the stuff is pulled
+    //update the MasterSheet of that issueNum with all the content pulled
+}
+
+//https://developers.google.com/apps-script/reference/script/spreadsheet-trigger-builder#onChange()
+function createTriggerOnOpenMasterSpreadSheet(sheet){
+    //when MasterSpreadSheet is opened, it pulls content from corresponding Section Sheets
+    ScriptApp.newTrigger("pullFromSection")
+    .forSpreadsheet(sheet)
+    .onOpen()
+    .create();
+}
+
+function createTimeDrivenTriggers() {
+  // Trigger every 5 minutes.
+  ScriptApp.newTrigger('pullFromSection')
+      .timeBased()
+      .everyMinutes(5)
+      .create();
+}
 
 
 //all of these need to be linked back to the Master Spreadsheet for the given issue
