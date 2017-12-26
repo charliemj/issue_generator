@@ -1,6 +1,6 @@
 /////////////////Spec///////////////////////
 //given a google spreadsheet of issue dates, generates folders and appropriate docs for each issue in a given drive
-//each folder should have permissions as specified in a "Permissions" google sheet
+//each folder should have permissions as specified in a "Permissions" google sheet (or maybe not... see README)
 //each issue folder will be named N_issueNumber_ and have a spreadsheet of the same title inside
 //there will also be a schedule and inshort google doc
 //there will be fields for article title, author, byline, word count, and editing status
@@ -28,6 +28,7 @@
 
 //the MasterSpreadSheet should have the following form: Issue Number, Issue Date, Special Notes
 //precondition: there exists a spreadsheet called "eic_sheet_template" that has the master sheet template
+//Also assumes there is a sectionSpreadsheet named "section_spreadsheet_template"
 function issueGenereration() {
 
     var ss = SpreadsheetApp.getActiveSpreadsheet(); //gets the SpreadSheet this script is attached to
@@ -41,6 +42,9 @@ function issueGenereration() {
     //TODO: do a check to make sure this file exists and throw a useful error if not
     //https://developers.google.com/apps-script/reference/drive/file-iterator
     var masterIssueSpreadsheetTemplate = DriveApp.getFilesByName("eic_sheet_template").next(); //the master spreadsheet
+    var sectionSpreadsheet = DriveApp.getFilesByName("section_spreadsheet_template").next();
+    var inshortTemplate = DriveApp.getFilesByName("inshort_template").next();
+    var sportsBlitzTemplate = DriveApp.getFilesByName("sports_blitz_template").next();
 
     var volumeFolder = DriveApp.getFolderById(folderId); //get folderId from config sheet
 
@@ -54,9 +58,27 @@ function issueGenereration() {
         var issueDate = issue.date;
         var issueInfo = issue.info;
 
-        //make a folder with that Issue Number and a doc with Notes
 
         makeMasterIssueFolder(volumeFolder,issueNum);
+
+        var sports = makeFolderInVolume(volumeFolder,"sports");
+        genSports(issueNum, sports);
+        var arts = makeFolderInVolume(volumeFolder,"arts");
+        genArts(issueNum, arts);
+        var news = makeFolderInVolume(volumeFolder,"news");
+        genNews(issueNum, news);
+        var features = makeFolderInVolume(volumeFolder,"features");
+        genFeatures(issueNum, features);
+        var opinion = makeFolderInVolume(volumeFolder,"opinion");
+        genOpinion(issueNum, opinion);
+        var fun = makeFolderInVolume(volumeFolder,"fun");
+        genFun(issueNum, fun);
+        var photo = makeFolderInVolume(volumeFolder,"photo");
+        genPhoto(issueNum, photo);
+        var campusLife = makeFolderInVolume(volumeFolder,"campus_life");
+        genCampusLife(issueNum, campusLife);
+        var science = makeFolderInVolume(volumeFolder,"science");
+        genScience(issueNum, science);
 
     }
 
@@ -106,48 +128,90 @@ function getAllIssues(issueSpreadsheet){
 //all of these need to be linked back to the Master Spreadsheet for the given issue
 //whenever a spreadsheet is updated in the below categories, the master spreadsheet should
 //be updated. Basically insert a row below section head?
-function genSports(){}
-function genArts(){
+function genSports(issueNum, parent){
+    var dept = "sports";
+    makeSectionIssueFolder(parent,dept,issueNum);
+    //makeSportsBlitz("Inshorts for "+name, theJustMadeSportsIssueFolder);
+}
+function genArts(issueNum, parent){
+    var dept = "arts";
+    makeSectionIssueFolder(parent,dept,issueNum);
     //arts spreadsheet might be good to note any embargo
 }
-function genNews(){
+function genNews(issueNum, parent){
+    var dept = "news";
+    makeSectionIssueFolder(parent,dept,issueNum);
     //for each issue, create a folder named the number of the issue
     //inside each folder have a dept_spreadsheet
+
+    //makeInshort("Inshorts for "+name, theJustMadeNewsIssueFolder);
 }
-function genScience(){}
-function genCampusLife(){}
-function genOpinion(){}
-function genPhoto(){} //photospread sheet
-function genFun(){}
-function genFeatures(){}
+function genScience(issueNum, parent){
+    var dept = "science";
+    makeSectionIssueFolder(parent,dept,issueNum);
+}
+function genCampusLife(issueNum, parent){
+    var dept = "campus_life";
+    makeSectionIssueFolder(parent,dept,issueNum);
+}
+function genOpinion(issueNum, parent){
+    var dept = "opinion";
+    makeSectionIssueFolder(parent,dept,issueNum);
+}
+function genPhoto(issueNum, parent){
+    var dept = "photo";
+    makeSectionIssueFolder(parent,dept,issueNum);
+} //photospread sheet
+function genFun(issueNum, parent){
+    var dept = "fun";
+    makeSectionIssueFolder(parent,dept,issueNum);
+}
+function genFeatures(issueNum, parent){
+    var dept = "features";
+    makeSectionIssueFolder(parent,dept,issueNum);
+}
 
 
-
-function makeMasterIssueFolder(parent,name){
-    //https://developers.google.com/drive/v3/web/folder
-    //https://stackoverflow.com/questions/11910734/google-apps-script-how-do-i-create-a-file-in-a-folder
-
+/*
+    Takes in a parent directory (the volume folder) and the issueNum (a string) to call the new folder
+    Creates said named folder in the parent folder
+    Adds the spreadsheet based off of the master spreadsheet template
+ */
+function makeMasterIssueFolder(parent,issueNum){
     //creates the new folder and returns it
-    folderMade = parent.createFolder(name);
+    folderMade = parent.createFolder(issueNum);
 
-    //make a copy of the MasterIssueSpreadsheet and name it after current issue (name)
-    makeMasterIssueSpreadsheet(name,folderMade);
+    //make a copy of the MasterIssueSpreadsheet and name it after current issue (issueNum)
+    makeMasterIssueSpreadsheet(issueNum,folderMade);
 }
 
-function makeMasterIssueSpreadsheet(name, destination){
+function makeFolderInVolume(parent, folderName){
+    folderMade = parent.createFolder(folderName);
+}
+
+function makeMasterIssueSpreadsheet(issueNum, destinationFolder){
     //https://developers.google.com/apps-script/reference/drive/file#makeCopy(String,Folder)
-    masterIssueSpreadsheetTemplate.makeCopy(name+"_eic_master_spreadsheet",destination);
+    masterIssueSpreadsheetTemplate.makeCopy(issueNum+"_eic_master_spreadsheet",destinationFolder);
 }
 
-function makeIssueSpreadsheet(name, dept){}
+function makeSectionIssueFolder(parent,dept,issueNum){
+    folderMade = parent.createFolder(issueNum);
+    makeSectionSpreadsheet(issueNum,dept,folderMade);
+}
 
-function makeInshort(){
+function makeSectionSpreadsheet(issueNum, dept, destinationFolder){
+    sectionSpreadsheet.copy(issueNum+"_"+dept, destinationFolder);
+}
+
+function makeIssueNotesDoc(){}
+
+function makeInshort(issueNum, destinationFolder){
     //make a copy of the Inshort doc
     //and add it to current folder
     //write the editable link to the news spreadsheet
 }
 
-function makeSportsBlitz(){
+function makeSportsBlitz(issueNum, destinationFolder){
     //make a copy of the Blitz doc
     //add it to current folder
     //write the editable link in the sports spreadsheet
@@ -163,3 +227,5 @@ function makeSportsBlitz(){
 
 //Resources used:
 //https://developers.google.com/sheets/api/quickstart/apps-script
+//https://developers.google.com/drive/v3/web/folder
+//https://stackoverflow.com/questions/11910734/google-apps-script-how-do-i-create-a-file-in-a-folder
