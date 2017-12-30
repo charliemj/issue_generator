@@ -7,4 +7,4 @@ Permissions: At the moment, my plan for permissions is not an automated process.
 
 Config Sheet:
 The config sheet needs to be as follows:
-|Parent | the folder ID number (from URL)|
+|volumeNumber | volumeNumber_root|
