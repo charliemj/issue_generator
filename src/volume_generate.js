@@ -51,18 +51,23 @@ function issueGenereration() {
     //assumes there is exactly one folder in the drive by the name V136_root (or more generally, volumeNumber_root)
     var volumeFolder_root = DriveApp.getFoldersByName(volumeNumber).next(); //get volumeNumber_root from config sheet
 
+
+    //makes section folders and returns a dictionary mapping each section to a Folder object
+    var sectionFolders = makeSectionFolders();
+
     //go to sheet, get all the issues and make an object for each issue with number, date, and notes
     var allIssues = getAllIssues(issueSheet);
     var allIssueNumbers = [];
+
+    //for each issue, make an Issue Object and create corresponding section Issue folders
     for (var i = 0; i < allIssues.length; i++){
         var issue = allIssues[i];
         var issueNum = issue.number;
         allIssueNumbers.push(issueNum);
         var issueDate = issue.date;
         var issueInfo = issue.info;
-
         makeMasterIssueFolder(volumeFolder,issueNum);
-        makeSections();
+        populateSectionIssueFolders(issueNum, sectionFolders);
     }
 
     //for each issue, make a folder with the name being the number of the issue, maintain a list
@@ -125,7 +130,10 @@ function makeMasterIssueSpreadsheet(issueNum, destinationFolder){
     eicIssueSpreadsheetTemplate.makeCopy(issueNum+"_eic_master_spreadsheet",destinationFolder);
 }
 
-function makeIssueNotesDoc(){}
+function makeIssueNotesDoc(){
+    //takes the issue notes as input and creates a doc titled
+    //"issueNum Issue Notes" and puts it in the folder
+}
 
 
 

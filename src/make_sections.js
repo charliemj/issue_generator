@@ -1,24 +1,42 @@
-function makeSections(){
-    //MAKE SECTIONS
-    //makeFolderInVolume(parent, folderName) and genSports(issueNum, parent)
+//Makes Section Folders
+//Right now would need to manually add new sections
+function makeSectionFolders(){
     var sports = makeFolderInVolume(volumeFolder,"Sports");
-    genSports(issueNum, sports);
     var arts = makeFolderInVolume(volumeFolder,"Arts");
-    genArts(issueNum, arts);
     var news = makeFolderInVolume(volumeFolder,"News");
-    genNews(issueNum, news);
     var features = makeFolderInVolume(volumeFolder,"Features");
-    genFeatures(issueNum, features);
     var opinion = makeFolderInVolume(volumeFolder,"Opinion");
-    genOpinion(issueNum, opinion);
     var fun = makeFolderInVolume(volumeFolder,"Fun");
-    genFun(issueNum, fun);
     var photo = makeFolderInVolume(volumeFolder,"Photo");
-    genPhoto(issueNum, photo);
     var campusLife = makeFolderInVolume(volumeFolder,"Campus Life");
-    genCampusLife(issueNum, campusLife);
     var science = makeFolderInVolume(volumeFolder,"Science");
-    genScience(issueNum, science);
+
+    sectionFolders = {"science":science,
+                    "news":news,
+                    "arts":arts,
+                    "features":features,
+                    "opinion":opinion,
+                    "fun":fun,
+                    "photo":photo,
+                    "CampusLife":campusLife,
+                    "sports":sports
+                                        };
+
+
+    return sectionFolders;
+}
+
+//Populates the section folders for each issue
+function populateSectionIssueFolders(issueNum, sectionFolders){
+    genSports(issueNum, sectionFolders.sports);
+    genArts(issueNum, sectionFolders.arts);
+    genNews(issueNum, sectionFolders.news);
+    genFeatures(issueNum, sectionFolders.features);
+    genOpinion(issueNum, sectionFolders.opinion);
+    genFun(issueNum, sectionFolders.fun);
+    genPhoto(issueNum, sectionFolders.photo);
+    genCampusLife(issueNum, sectionFolders.campusLife);
+    genScience(issueNum, sectionFolders.science);
 }
 
 function makeSectionIssueFolder(parent,dept,issueNum){
