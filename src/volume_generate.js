@@ -16,8 +16,12 @@ function generateVolume() {
     var volumeNumber_root = configSheet.getSheetValues(1,1,1,1)[0][1];//this is magic-numbered such that the spreadsheet ID is
     //in the 1,2 position of the sheet
 
+    var volumeNumber = volumeNumber_root.replace("_root", "");
+
     //TODO: do a check to make sure this file exists and throw a useful error if not
     //this assumes that there is exactly one file of the name of the stuff in the strings
+
+    //Get templates
     var eicIssueSpreadsheetTemplate = DriveApp.getFilesByName("eic_sheet_template").next(); //the master spreadsheet
     var sectionSpreadsheet = DriveApp.getFilesByName("section_spreadsheet_template").next();
     var sectionPhotoSpreadsheet = DriveApp.getFilesByName("section_photo_spreadsheet_template").next();
@@ -25,15 +29,13 @@ function generateVolume() {
     var sportsBlitzTemplate = DriveApp.getFilesByName("sports_blitz_template").next();
 
     //assumes there is exactly one folder in the drive by the name V136_root (or more generally, volumeNumber_root)
-    var volumeFolder_root = DriveApp.getFoldersByName(volumeNumber).next(); //get volumeNumber_root from config sheet
+    var volumeFolder = DriveApp.getFoldersByName(volumeNumber).next(); //get volumeNumber_root from config sheet
 
     //makes section folders and returns a dictionary mapping each section to a Folder object
     var sectionFolders = makeSectionFolders();
 
-    //go to sheet, get all the issues and make an object for each issue with number, date, and notes
     var allIssues = getAllIssues(issueSheet);
     var allIssueNumbers = [];
-
     //for each issue, make an Issue Object and create corresponding section Issue folders
     for (var i = 0; i < allIssues.length; i++){
         var issue = allIssues[i];
@@ -68,12 +70,12 @@ function getAllIssues(issueSpreadsheet){
     for (var row = 1; row <= numRows; row++){
         //each row is an issue
         var issueDate = allIssuesInfo[row][1];
-        var issueNumber = allIssuesInfo[row][2];
+        var issueNum = allIssuesInfo[row][2];
         var issueInfo = allIssuesInfo[row][3];
         //create Issue object
         var issue = {
             "date":issueDate,
-            "number":issueNumber,
+            "number":issueNum,
             "info":issueInfo
         };
         allIssue.push(issue);
@@ -118,17 +120,7 @@ function makeFolderInVolume(parent, folderName){
  * @return {[type]}                   [description]
  */
 function makeMasterIssueSpreadsheet(issueNum, destinationFolder){
-    //https://developers.google.com/apps-script/reference/drive/file#makeCopy(String,Folder)
     eicIssueSpreadsheetTemplate.makeCopy(issueNum+"_eic_master_spreadsheet",destinationFolder);
-}
-
-/**
- * [makeIssueNotesDoc description]
- * @return {[type]} [description]
- */
-function makeIssueNotesDoc(){
-    //takes the issue notes as input and creates a doc titled
-    //"issueNum Issue Notes" and puts it in the folder
 }
 
 
