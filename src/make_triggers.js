@@ -7,6 +7,11 @@
 
 
 //when MasterSpreadSheet is opened, it pulls content from corresponding Section Sheets
+/**
+ * [createTriggerOnOpenMasterSpreadSheet description]
+ * @param  {[type]} sheet [description]
+ * @return {[type]}       [description]
+ */
 function createTriggerOnOpenMasterSpreadSheet(sheet){
     ScriptApp.newTrigger("pullFromSection")
     .forSpreadsheet(sheet)
@@ -15,6 +20,10 @@ function createTriggerOnOpenMasterSpreadSheet(sheet){
 }
 
 //Will pull from each section and put into eicIssueSpreadSheet every 5 minutes
+/**
+ * [createTimeDrivenTriggers description]
+ * @return {[type]} [description]
+ */
 function createTimeDrivenTriggers() {
   // Trigger every 5 minutes.
   ScriptApp.newTrigger('pullFromSection')
@@ -23,8 +32,15 @@ function createTimeDrivenTriggers() {
       .create();
 }
 
+/**
+ * [pullFromSection description]
+ * @param  {[type]} issueNum [description]
+ * @return {[type]}          [description]
+ */
 function pullFromSection(issueNum){
     //go to each section and then that section's issueNum folder and spreadsheet
     //make sure all the stuff is pulled
     //update the MasterSheet of that issueNum with all the content pulled
 }
+
+//TODO make photospreadsheet triggers
