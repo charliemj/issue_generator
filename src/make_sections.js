@@ -1,9 +1,7 @@
-//Makes Section Folders (for the top level directory)
-//Returns a dictionary mapping section name strings to their Folder objects
-//Right now would need to manually add new sections
+//Right now would need to manually add new sections below
 /**
- * [makeSectionFolders description]
- * @return {[type]} [description]
+ * Makes Section Folders (for the top level directory) for each section
+ * @return {Dictionary} Returns a dictionary mapping section name strings to their Folder objects
  */
 function makeSectionFolders(){
     var sports = makeFolderInVolume(volumeFolder,"Sports");
@@ -17,28 +15,27 @@ function makeSectionFolders(){
     var science = makeFolderInVolume(volumeFolder,"Science");
 
     sectionFolders = {"science":science,
-                    "news":news,
-                    "arts":arts,
-                    "features":features,
-                    "opinion":opinion,
-                    "fun":fun,
-                    "photo":photo,
-                    "campusLife":campusLife,
-                    "sports":sports};
+                        "news":news,
+                        "arts":arts,
+                        "features":features,
+                        "opinion":opinion,
+                        "fun":fun,
+                        "photo":photo,
+                        "campusLife":campusLife,
+                        "sports":sports};
 
     return sectionFolders;
 }
 
-//puts an issue folder in a section folder and returns the sectionIssueFolder
 /**
- * [makeSectionIssueFolder description]
- * @param  {Folder} sectionFolder   [description]
- * @param  {String} dept     [description]
- * @param  {String} issueNum [description]
- * @param {String} issueInfo [description]
- * @return {Folder}          [description]
+ * Puts an issueFolder into a sectionFolder and returns the Section's issueFolder
+ * @param  {Folder} sectionFolder  the top level section Folder
+ * @param  {String} section     the section
+ * @param  {String} issueNum the issue number
+ * @param {String} issueInfo any additional info about the issue
+ * @return {Dictionary} issueFolderObject a dict of the issueFolder Folder and the associated Sheet objects
  */
-function makeSectionIssueFolder(sectionFolder,dept,issueNum, issueInfo){
+function makeSectionIssueFolder(sectionFolder, section, issueNum, issueInfo){
     sectionIssueFolder = sectionFolder.createFolder(issueNum);
     sectionSheet = makeSectionSpreadsheet(issueNum, dept, sectionIssueFolder);
     issueNotes = makeIssueNotesDoc(issueInfo, issueNum, sectionIssueFolder);
@@ -57,10 +54,10 @@ function makeSectionIssueFolder(sectionFolder,dept,issueNum, issueInfo){
  * Creates a section Folder for each section in the Volume directory
  * The Folder is populated by methods within this method to include
  * A spreadsheet and any accompanying documents/sheets
- * @param  {String} issueNum     [description]
- * @param  {Folder} volumeFolder [description]
- * @param  {String} section      [description]
- * @return {[type]}              [description]
+ * @param  {String} issueNum     the issue number
+ * @param  {Folder} volumeFolder the volume Folder
+ * @param  {String} section      the section
+ * @return returns nothing
  */
 function makeSection(issueNum, volumeFolder, section){
 
@@ -81,7 +78,7 @@ function makeSection(issueNum, volumeFolder, section){
 
 /**
  * Populates the section issue folders with spreadsheets
- * @param  {String} issueNum       the issue number
+ * @param  {String} issueNum   the issue number
  * @param  {Dictionary} sectionFolders section names mapped to Section Folders
  * @return  does not return anything
  */
@@ -93,12 +90,13 @@ function populateSectionIssueFolders(issueNum, sectionFolders){
 }
 
 /**
- * [makeIssueNotesDoc description]
- * @param  {String} issueNum          [description]
- * @param  {Folder} destinationFolder [description]
- * @return {[type]} [description]
+ * Creates a Google Doc with any special notes about the issue, stores the Doc
+ * In the Issue folder
+ * @param  {String} issueNum   the issue number
+ * @param  {Folder} issueFolder the issue folder the new Doc will be stored in
+ * @return returns nothing
  */
-function makeIssueNotesDoc(content, issueNum, destinationFolder){
+function makeIssueNotesDoc(content, issueNum, issueFolder){
     //takes the issue notes as input and creates a doc titled
     //"issueNum Issue Notes" and puts it in the folder
     var name = issueNum+" special notes";
@@ -106,40 +104,31 @@ function makeIssueNotesDoc(content, issueNum, destinationFolder){
     issueNotesDoc.appendParagraph(content);
 
     //transform the Document into a Blob that DriveApp can work with
-    fileIssueNotesDoc = DriveApp.destinationFolder.createFile(issueNotesDoc);
+    fileIssueNotesDoc = DriveApp.issueFolder.createFile(issueNotesDoc);
 }
 
-//creates the content spreadsheet for a particular section's issue folder
 /**
- * [makeSectionSpreadsheet description]
- * @param  {String} issueNum          [description]
- * @param  {String} dept              [description]
- * @param  {Folder} destinationFolder [description]
- * @return {[type]}                   [description]
+ * Creates the content spreadsheet for a particular section's issue folder
+ * @param  {String} issueNum     the issue number
+ * @param  {String} section      the section
+ * @param  {Folder} issueFolder  the issue folder the Sheet will be placed in
+ * @return {Sheet} returns the sectionSheet
  */
-function makeSectionSpreadsheet(issueNum, dept, destinationFolder){
-    sectionSheet = sectionSpreadsheet.copy(issueNum+"_"+dept, destinationFolder);
+function makeSectionSpreadsheet(issueNum, sectiond, issueFolder){
+    sectionSheet = sectionSpreadsheet.copy(issueNum+"_"+section, issueFolder);
     sectionSheet.setSharing(DriveApp.Access.ANYONE, DriveApp.Permission.EDIT);
     return sectionSheet;
 }
 
-//creates the photo spreadsheet for a particular section's issue folder
 /**
- * [makeSectionPhotoSpreadsheet description]
- * @param  {String} issueNum          [description]
- * @param  {String} dept              [description]
- * @param  {Folder} destinationFolder [description]
- * @return {[type]}                   [description]
+ * Creates the photo spreadsheet for a particular section's issue folder
+ * @param  {String} issueNum     the issue number
+ * @param  {String} section      the section
+ * @param  {Folder} issueFolder  the issue folder the Sheet will be placed in
+ * @return {Sheet} returns the photoSheet
  */
-function makeSectionPhotoSpreadsheet(issueNum, dept, destinationFolder){
-    sectionPhotoSpreadsheet.copy(issueNum+"_"+dept, destinationFolder);
+function makeSectionPhotoSpreadsheet(issueNum, section, issueFolder){
+    sectionPhotoSpreadsheet.copy(issueNum+"_"+section, issueFolder);
     sectionPhotoSpreadsheet.setSharing(DriveApp.Access.ANYONE, DriveApp.Permission.EDIT);
 }
-
-//////////////////////////////////////////////
-//////////Generates each section//////////////
-//////////////////////////////////////////////
-
-
-
 
