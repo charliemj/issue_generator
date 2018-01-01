@@ -6,25 +6,25 @@
 //https://developers.google.com/apps-script/reference/script/spreadsheet-trigger-builder#onChange()
 
 
-//when MasterSpreadSheet is opened, it pulls content from corresponding Section Sheets
+
 /**
- * [createTriggerOnOpenMasterSpreadSheet description]
- * @param  {[type]} sheet [description]
- * @return {[type]}       [description]
+ * Creates Trigger s.t. when eicIssueSpreadSheet is opened, it pulls content from corresponding Section Sheets
+ * @param  {Sheet} eicIssueSheet the given eicIssueSpreadsheet that is opened
+ * @return returns nothing
  */
-function createTriggerOnOpenMasterSpreadSheet(sheet){
+function createTriggerOnOpenEicIssueSpreadSheet(eicIssueSheet){
     ScriptApp.newTrigger("pullFromSection")
     .forSpreadsheet(sheet)
     .onOpen()
     .create();
 }
 
-//Will pull from each section and put into eicIssueSpreadSheet every 5 minutes
+
 /**
- * [createTimeDrivenTriggers description]
- * @return {[type]} [description]
+ * Creates Trigger s.t. it will pull from each section and put into eicIssueSpreadSheet every 5 minutes
+ * @return returns nothing
  */
-function createTimeDrivenTriggers() {
+function createTimeDrivenTriggersForEICSheet() {
   // Trigger every 5 minutes.
   ScriptApp.newTrigger('pullFromSection')
       .timeBased()
@@ -39,8 +39,26 @@ function createTimeDrivenTriggers() {
  */
 function pullFromSection(issueNum){
     //go to each section and then that section's issueNum folder and spreadsheet
+    //for section in sectionFolders
+    for(var i = 0; i < sectionFolders.length; i++){
+        var section = sectionFolders[i];
+        //I'm not convinced the type of sectionFolders supports indexing
+        //like I want here
+    }
     //make sure all the stuff is pulled
     //update the MasterSheet of that issueNum with all the content pulled
 }
 
+
+function emailsToEditors(){
+  //sends an email each Thursday informing editors of upcoming issue
+  //and links and such
+}
+
+
 //TODO make photospreadsheet triggers
+//
+//
+//
+//
+//
