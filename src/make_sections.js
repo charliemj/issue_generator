@@ -23,7 +23,7 @@ function makeSectionFolders(){
                     "opinion":opinion,
                     "fun":fun,
                     "photo":photo,
-                    "CampusLife":campusLife,
+                    "campusLife":campusLife,
                     "sports":sports};
 
     return sectionFolders;
@@ -69,11 +69,11 @@ function makeSection(issueNum, volumeFolder, section){
     sectionIssueFolder = sectionIssueFolderObject.issueFolder;
     sectionIssueSheet = sectionIssueFolderObject.sectionSheet;
 
-    if(section=="sports"){
+    if(section == "sports"){
         makeSportsBlitz("Sports Blitz for "+issueNum, sectionIssueFolder, sectionIssueSheet);
     }
 
-    if(section=="news"){
+    if(section == "news"){
         makeInshorts("Inshorts for "+issueNum, madeFolder, sectionIssueSheet);
     }
 }
