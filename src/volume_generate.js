@@ -1,13 +1,13 @@
 //precondition: the MasterSpreadSheet should have the following form: Issue Number, Issue Date, Special Notes
 //precondition: there exists a spreadsheet called "eic_sheet_template" that has the master sheet template
 //Also assumes there is a sectionSpreadsheet named "section_spreadsheet_template"
-
 /**
- * [generateVolume description]
- * @return {[type]} [description]
+ * Generates a complete Volume and corresponding section folders with folders
+ * for each issue of The Tech. Each issueFolder has a spreadsheet which links to a
+ * Master EIC spreadsheet to keep track of content for each section of the paper.
+ * @return returns nothing
  */
 function generateVolume() {
-
     var ss = SpreadsheetApp.getActiveSpreadsheet(); //gets the SpreadSheet this script is attached to
     var issueSheet = ss.getSheetByName("issues");
     var departmentsSheet = ss.getSheetByName("departments");
@@ -51,9 +51,9 @@ function generateVolume() {
 //precondition: issueSpreadsheet has 3 columns in this order: issueDate, issueNumber, issueNotes
 //this means it expects 3 columns and a row for each issue
 /**
- * [getAllIssues description]
- * @param  {[type]} issueSpreadsheet [description]
- * @return {[type]}                  [description]
+ * Extracts info about all issues of a Volume of The Tech from a Google Sheet
+ * @param {Sheet} issueSpreadsheet a Sheet containing issue number, date, and info for an entire Tech Volume
+ * @return {List} allIssues  a list of issueObjects
  */
 function getAllIssues(issueSpreadsheet){
     var startRow = 2;
@@ -89,38 +89,36 @@ function getAllIssues(issueSpreadsheet){
     Adds a spreadsheet based off of the master spreadsheet template to that issue folder
  */
 /**
- * [makeMasterIssueFolder description]
- * @param  {Folder} parent   [description]
- * @param  {String} issueNum [description]
- * @return {[type]}          [description]
+ * Creates the EIC-Copy level folder for a given issueNum
+ * Inside the folder is a spreadsheet specific to the issueNum
+ * @param  {Folder} volumeFolder   the Volume-level Folder
+ * @param  {String} issueNum the issue number
+ * @return returns nothing
  */
-function makeMasterIssueFolder(parent,issueNum){
-    //creates the new folder and returns it
-    folderMade = parent.createFolder(issueNum);
-    //make a copy of the MasterIssueSpreadsheet and name it after current issue (issueNum)
-    makeMasterIssueSpreadsheet(issueNum,folderMade);
+function makeMasterIssueFolder(volumeFolder, issueNum){
+    issueFolder = volumeFolder.createFolder(issueNum);
+    makeMasterIssueSpreadsheet(issueNum,issueFolder);
 }
 
-//makes a folder of name folderName inside the parent directory
 /**
- * [makeFolderInVolume description]
- * @param  {Folder} parent     [description]
- * @param  {String} folderName [description]
- * @return {[type]}            [description]
+ * makes a folder of name folderName inside the parent directory
+ * @param  {Folder} parentFolder   the parent folder
+ * @param  {String} folderName the new folder's name
+ * @return returns nothing
  */
-function makeFolderInVolume(parent, folderName){
-    folderMade = parent.createFolder(folderName);
+function makeFolderInVolume(parentFolder, folderName){
+    folderMade = parentFolder.createFolder(folderName);
 }
 
-//makes a copy of the EIC spreadsheet, titles it appropriately, and then saves it in the destinationFolder
+
 /**
- * [makeMasterIssueSpreadsheet description]
- * @param  {String} issueNum          [description]
- * @param  {Folder} destinationFolder [description]
- * @return {[type]}                   [description]
+ * makes a copy of the EIC spreadsheet, titles it appropriately, and then saves it in the issueFolder
+ * @param  {String} issueNum     the issue number
+ * @param  {Folder} issueFolder the issueFolder the sheet will be placed in
+ * @return returns nothing
  */
-function makeMasterIssueSpreadsheet(issueNum, destinationFolder){
-    eicIssueSpreadsheetTemplate.makeCopy(issueNum+"_eic_master_spreadsheet",destinationFolder);
+function makeMasterIssueSpreadsheet(issueNum, issueFolder){
+    eicIssueSpreadsheetTemplate.makeCopy(issueNum+"_eic_master_spreadsheet", issueFolder);
 }
 
 
