@@ -1,8 +1,10 @@
 /**
- * [makeInshorts description]
- * @param  {[type]} issueNum          [description]
- * @param  {[type]} issueFolder [description]
- * @return {[type]}                   [description]
+ * Creates an inshort document based off a template and puts it in the issueFolder specified + links to
+ * issue spreadsheet
+ * @param  {String} issueNum          the issue number
+ * @param {Sheet} newsSheet   the news spreadsheet for the given issue
+ * @param  {Folder} issueFolder the issue folder the inshorts will be placed in
+ * @return returns nothing
  */
 function makeInshorts(issueNum, issueFolder, newsSheet){
     //makes a new Inshorts doc for the issue and puts it in the issue folder
@@ -20,10 +22,12 @@ function makeInshorts(issueNum, issueFolder, newsSheet){
 }
 
 /**
- * [makeSportsBlitz description]
- * @param  {[type]} issueNum          the issue number
- * @param  {[type]} issueFolder [description]
- * @return {[type]}                   [description]
+ * Creates an sportsBlitz document based off a template and puts it in the issueFolder specified + links to
+ * issue spreadsheet
+ * @param  {String} issueNum          the issue number
+ * @param {Sheet} sportsSheet   the sports spreadsheet for the given issue
+ * @param  {Folder} issueFolder the issue folder the sportsblitz will be placed in
+ * @return returns nothing
  */
 function makeSportsBlitz(issueNum, issueFolder, sportsSheet){
     var sportsBlitz = sportsBlitzTemplate.copy(issueNum+"_SportsBlitz", issueFolder);
