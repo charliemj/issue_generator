@@ -44,6 +44,9 @@ function Volume(ss){
         sectionFolder = sections.section;
         section.makeAllIssuesInSection();
     }
+
+    //lets get all the sheets and folders and organize them by issue num to make pullFromSections
+    //cleaner
 }
 
 //precondition: issueSpreadsheet has 3 columns in this order: issueDate, issueNumber, issueNotes

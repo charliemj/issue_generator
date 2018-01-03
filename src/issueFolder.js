@@ -14,11 +14,18 @@ function IssueFolder (Section, issue){
 
     function makeIssueSheet(issueNum,sectionName,issueFolder){
         var sheetName = sectionSpreadsheet;
-        if (sectionName == "eic_copy"){
+        if(sectionName == "eic_copy"){
             sheetName = eicIssueSpreadsheetTemplate;
         }
         sectionSheet = sheetName.copy(issueNum+"_"+sectionName, issueFolder);
         sectionSheet.setSharing(DriveApp.Access.ANYONE, DriveApp.Permission.EDIT); //anyone with link can edit
+
+        //put triggers on EIC sheets
+        if(sectionName == "eic_copy"){
+            createTriggerOnOpenEicIssueSpreadSheet(sectionSheet, this.issueNum);
+            createTimeDrivenTriggersForEICSheet(sectionSheet, this.issueNum);
+        }
+
         return sectionSheet;
     }
 
