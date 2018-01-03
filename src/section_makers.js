@@ -55,7 +55,7 @@ function makeSectionFolders(){
  * @param  {String} section      the section
  * @return returns nothing
  */
-function makeSection(issueNum, volumeFolder, section){
+function makeIssueForSection(issueNum, volumeFolder, section){
 
     sectionIssueFolderObject = makeSectionIssueFolder(volumeFolder,section,issueNum);
 

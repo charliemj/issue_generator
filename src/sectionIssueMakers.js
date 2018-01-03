@@ -30,7 +30,7 @@ function populateSectionIssueFolders(issueNum){
    for(var i = 0; i < sectionFolders.length; i++){
         var section = sectionFolders[i].name;
         //TODO  sectionFolders[i].issueInfo problem
-        makeSection(issueNum, parentFolder, sectionFolders[i].issueInfo, section);
+        makeIssueForSection(issueNum, volumeFolder, sectionFolders[i].issueInfo, section);
     }
 }
 
