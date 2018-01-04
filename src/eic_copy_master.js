@@ -10,9 +10,11 @@ function EicCopySheet(volume){
     }
 
     //for each issue, name a sheet in the spreadsheet
+    var templateSheet = eicCopySheet.getSheetByName("template");
 
     for(var i=0; i<allIssueNums.length; i++){
         issueNum = allIssueNums[i];
-        eicCopySheet.insertSheet(issueNum, i); //insertSheet(sheetName, sheetIndex)
+        //i+1 because the 0th sheet is the template sheet
+        eicCopySheet.insertSheet(issueNum, i+1, {template: templateSheet}); //insertSheet(sheetName, sheetIndex)
     }
 }
