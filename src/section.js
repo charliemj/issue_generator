@@ -7,7 +7,7 @@ function Section(volume, sectionName){
         var allIssueFolders = [];
         for(var i in allIssueObjects){
             var issue = allIssueObjects[i];
-            var sectionIssueFolder = new issueFolder(this, issue);
+            var sectionIssueFolder = new issueFolder(this, issue, volume);
             allIssueFolders.push(sectionIssueFolder);
         }
         return allIssueFolders;
