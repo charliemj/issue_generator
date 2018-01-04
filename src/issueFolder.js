@@ -13,18 +13,9 @@ function IssueFolder (Section, issue, volume){
     this.issueFolder = makeIssueFolder();
 
     function makeIssueSheet(issueNum,sectionName,issueFolder){
-        var sheetName = sectionSpreadsheet;
-        if(sectionName == "eic_copy"){
-            sheetName = eicIssueSpreadsheetTemplate;
-        }
-        sectionSheet = sheetName.copy(issueNum+"_"+sectionName, issueFolder);
-        sectionSheet.setSharing(DriveApp.Access.ANYONE, DriveApp.Permission.EDIT); //anyone with link can edit
 
-        //put triggers on EIC sheets
-        if(sectionName == "eic_copy"){
-            createTriggerOnOpenEicIssueSpreadSheet(sectionSheet, this.issueNum);
-            createTimeDrivenTriggersForEICSheet(sectionSheet, this.issueNum);
-        }
+        sectionSheet = sectionSpreadsheet.copy(issueNum+"_"+sectionName, issueFolder);
+        sectionSheet.setSharing(DriveApp.Access.ANYONE, DriveApp.Permission.EDIT); //anyone with link can edit
 
         //updates the Volumes allSheetsByIssue dict with this sections issueNum sheet
         volume.allSheetsByIssue.issueNum.push([sectionSheet,sectionName]);

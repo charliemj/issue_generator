@@ -15,7 +15,7 @@ function Volume(ss){
     //Will be a dictionary mapping issueNum {Strings}: [[spreadsheet, section],[spreadsheet, section]]
     this.allSheetsByIssue = {};
 
-    for(var ii; ii<allIssueObjects.length; ii++){
+    for(var ii = 0; ii<allIssueObjects.length; ii++){
         //populate the issue dict with an empty list for each issue number
         this.allSheetsByIssue[allIssueObjects.number] = [];
     }
@@ -44,21 +44,16 @@ function Volume(ss){
         this.sectionFolders.sectionName = sect;
     }
 
-    this.eic_copyFolder = this.sectionFolders["eic_copy"];
+    //make the eicCopy master sheet
+    this.eic_copy_sheet = new EicCopySheet(this);
 
-    //populate eicFolder and sectionFolders
+    //populate sectionFolders
     for (var j in sections){
         section = sections[j];
         sectionFolder = sections.section;
         section.makeAllIssuesInSection();
     }
 
-    //All the Folders have been made and populated with Sheets + Docs
-    //Time to attach Triggers and link Section sheets to the EIC sheet
-
-    function pullFromSections(issueNum){
-
-    }
 }
 
 //precondition: issueSpreadsheet has 3 columns in this order: issueDate, issueNumber, issueNotes

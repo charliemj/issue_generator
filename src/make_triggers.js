@@ -15,14 +15,15 @@ var ssForTrigger = SpreadsheetApp.getActive();//get by issue?
 var activeSheetForTrigger = ssForTrigger.getActiveSheet();
 var issueNumberActive = activeSheetForTrigger.getSheetName();
 
-function pullFromSectionWithParams(issueNumberActive){
+function pullFromSectionWithParams(issueNumberActive,volume){
+  var allSheetsByIssue = volume.allSheetsByIssue;
   //go through each Section, go to that issueNum
   //copy all it's contents to the appropriate section
   //of the EIC spreadsheet
 }
 
 function triggerFunction(){
-  pullFromSectionWithParams(issueNumberActive);
+  pullFromSectionWithParams(issueNumberActive, volume);
 }
 
 
