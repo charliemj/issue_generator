@@ -59,7 +59,6 @@ function Volume(ss){
     function pullFromSections(issueNum){
 
     }
-
 }
 
 //precondition: issueSpreadsheet has 3 columns in this order: issueDate, issueNumber, issueNotes

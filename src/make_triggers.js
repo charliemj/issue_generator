@@ -6,45 +6,45 @@
 //https://developers.google.com/apps-script/reference/script/spreadsheet-trigger-builder#onChange()
 
 
+//We are limited to having 20 triggers per script
+//Game plan: we are going to have just the eic spreadsheet, no folders for issues
+//each issue will be a sheet in the spreadsheet
 
-/**
- * Creates Trigger s.t. when eicIssueSpreadSheet is opened, it pulls content from corresponding Section Sheets
- * @param  {Sheet} eicIssueSheet the given eicIssueSpreadsheet that is opened
- * @return returns nothing
- */
-function createTriggerOnOpenEicIssueSpreadSheet(eicIssueSheet, issueNum){
-    var pullFromSectionWithNum = function (){
-      return pullFromSection(issueNum);
-    };
 
-  ScriptApp.newTrigger('pullFromSectionWithNum')
-    .forSpreadsheet(eicIssueSheet)
-    .onOpen()
-    .create();
+var ssForTrigger = SpreadsheetApp.getActive();//get by issue?
+var activeSheetForTrigger = ssForTrigger.getActiveSheet();
+var issueNumberActive = activeSheetForTrigger.getSheetName();
+
+function pullFromSectionWithParams(issueNumberActive){
+  //go through each Section, go to that issueNum
+  //copy all it's contents to the appropriate section
+  //of the EIC spreadsheet
+}
+
+function triggerFunction(){
+  pullFromSectionWithParams(issueNumberActive);
 }
 
 
-/**
- * Creates Trigger s.t. it will pull from each section and put into eicIssueSpreadSheet every 5 minutes
- * @return returns nothing
- */
-function createTimeDrivenTriggersForEICSheet(eicIssueSheet, issueNum) {
-  // Trigger every 5 minutes.
-  var pullFromSectionWithNum = function (){
-    return pullFromSection(issueNum);
-  };
+ScriptApp.newTrigger('triggerFunction')
+  .forSpreadsheet(eicIssueSheet)
+  .onOpen()
+  .create();
 
-  ScriptApp.newTrigger('pullFromSectionWithNum')
+ScriptApp.newTrigger('triggerFunction')
       .forSpreadsheet(eicIssueSheet)
       .timeBased()
       .everyMinutes(5)
       .create();
-}
 
 
-function pullFromSections(issueNum){
 
-}
+
+
+
+
+
+
 
 
 function emailsToEditors(){
