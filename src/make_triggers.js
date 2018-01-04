@@ -17,7 +17,7 @@ function createTriggerOnOpenEicIssueSpreadSheet(eicIssueSheet, issueNum){
       return pullFromSection(issueNum);
     };
 
-  ScriptApp.newTrigger('pullFromSectionWithNum()')
+  ScriptApp.newTrigger('pullFromSectionWithNum')
     .forSpreadsheet(eicIssueSheet)
     .onOpen()
     .create();
@@ -34,28 +34,16 @@ function createTimeDrivenTriggersForEICSheet(eicIssueSheet, issueNum) {
     return pullFromSection(issueNum);
   };
 
-  ScriptApp.newTrigger('pullFromSectionWithNum()')
+  ScriptApp.newTrigger('pullFromSectionWithNum')
       .forSpreadsheet(eicIssueSheet)
       .timeBased()
       .everyMinutes(5)
       .create();
 }
 
-/**
- * [pullFromSection description]
- * @param  {[type]} issueNum [description]
- * @return {[type]}          [description]
- */
+
 function pullFromSections(issueNum){
-    //go to each section and then that section's issueNum folder and spreadsheet
-    //for section in sectionFolders
-    for(var i = 0; i < sectionFolders.length; i++){
-        var section = sectionFolders[i];
-        //I'm not convinced the type of sectionFolders supports indexing
-        //like I want here
-    }
-    //make sure all the stuff is pulled
-    //update the MasterSheet of that issueNum with all the content pulled
+
 }
 
 
