@@ -1,4 +1,4 @@
-function IssueFolder (Section, issue){
+function IssueFolder (Section, issue, volume){
     this.issue = issue;
     this.issueNum = issue.number;
     this.issueDate = issue.date;
@@ -25,6 +25,9 @@ function IssueFolder (Section, issue){
             createTriggerOnOpenEicIssueSpreadSheet(sectionSheet, this.issueNum);
             createTimeDrivenTriggersForEICSheet(sectionSheet, this.issueNum);
         }
+
+        //updates the Volumes allSheetsByIssue dict with this sections issueNum sheet
+        volume.allSheetsByIssue.issueNum.push([sectionSheet,sectionName]);
 
         return sectionSheet;
     }
