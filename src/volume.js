@@ -12,6 +12,14 @@ function Volume(ss){
     //creates and returns list of issue objects
     var allIssueObjects = extractIssuesFromSheet(this.issueSheet);
 
+    //Will be a dictionary mapping issueNum {Strings}: [[spreadsheet, section],[spreadsheet, section]]
+    this.allSheetsByIssue = {};
+
+    for(var ii; ii<allIssueObjects.length; ii++){
+        //populate the issue dict with an empty list for each issue number
+        this.allSheetsByIssue[allIssueObjects.number] = [];
+    }
+
     //returns list of departments as strings
     var sections = this.sectionsSheet.getSheetValues(1,1,this.sectionsSheet.getLastRow(),1)[0];
 
@@ -45,8 +53,13 @@ function Volume(ss){
         section.makeAllIssuesInSection();
     }
 
-    //lets get all the sheets and folders and organize them by issue num to make pullFromSections
-    //cleaner
+    //All the Folders have been made and populated with Sheets + Docs
+    //Time to attach Triggers and link Section sheets to the EIC sheet
+
+    function pullFromSections(issueNum){
+
+    }
+
 }
 
 //precondition: issueSpreadsheet has 3 columns in this order: issueDate, issueNumber, issueNotes
