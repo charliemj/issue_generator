@@ -34,7 +34,6 @@ function generateVolume() {
     //makes section folders and returns a list of Section Objects which have a Folder and Name
     var sectionFolders = makeSectionFolders();
 
-    //TODO: reformat the layout of this object
     var allIssueObjects = extractIssuesFromSheet(issueSheet);
 
     var allIssueNumbers = [];
