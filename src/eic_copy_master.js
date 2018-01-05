@@ -12,6 +12,7 @@ function EicCopySheet(volume){
     //for each issue, name a sheet in the spreadsheet
     var templateSheet = eicCopySheet.getSheetByName("template");
 
+    //make the sheets for each issue inside the EIC Spreadsheet
     for(var i=0; i<allIssueNums.length; i++){
         issueNum = allIssueNums[i];
         //i+1 because the 0th sheet is the template sheet
