@@ -23,8 +23,9 @@ function Volume(ss, templates){
     }
 
     //returns list of departments as strings
-    var sections = this.sectionsSheet.getSheetValues(1,1,this.sectionsSheet.getLastRow(),1)[0];
+    var sections = this.sectionsSheet.getSheetValues(1,1,this.sectionsSheet.getLastRow(),1);
 
+    Logger.log("Sections are: "+sections);
     this.volumeFolder = DriveApp.getFoldersByName(this.volumeNumber+"_root").next(); //get volumeNumber_root from config sheet
 
     /**
