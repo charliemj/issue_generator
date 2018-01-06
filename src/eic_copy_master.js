@@ -1,6 +1,6 @@
 function EicCopySheet(volume){
     //make EicCopySheet
-    eicCopySheet = sectionSpreadsheet.copy("EIC Copy Sheet for "+volume.volumeNumber, volume.volumeFolder);
+    eicCopySheet = volume.sectionIssueSheet.copy("EIC Copy Sheet for "+volume.volumeNumber, volume.volumeFolder);
     eicCopySheet.setSharing(DriveApp.Access.ANYONE, DriveApp.Permission.EDIT); //anyone with link can edit
 
     var allIssueNums = Object.keys(volume.allSheetsByIssue).sort(compareNumbers);
