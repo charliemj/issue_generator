@@ -42,7 +42,7 @@ function Volume(ss, templates){
     for (var i in sections){
         var sectionName = sections[i];
         var sect = new Section(this, sectionName);
-        this.sectionFolders.sectionName = sect;
+        this.sectionFolders[sectionName] = sect;
     }
 
     //make the eicCopy master sheet
@@ -50,9 +50,9 @@ function Volume(ss, templates){
 
     //populate sectionFolders
     for (var j in sections){
-        section = sections[j];
-        sectionFolder = sections.section;
-        section.makeAllIssuesInSection();
+        sectionName = sections[j];
+        sectionFolder = this.sectionFolders[sectionName];
+        sectionFolder.makeAllIssuesInSection();
     }
 
 }
