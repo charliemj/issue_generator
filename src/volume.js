@@ -19,7 +19,7 @@ function Volume(ss, templates){
 
     for(var ii = 0; ii<allIssueObjects.length; ii++){
         //populate the issue dict with an empty list for each issue number
-        this.allSheetsByIssue[allIssueObjects.number] = [];
+        this.allSheetsByIssue[allIssueObjects[ii].number] = []; //BUG this.allSheetsByIssue[allIssueObjects.number] is undefined
     }
 
     //returns list of departments as strings
