@@ -87,7 +87,7 @@ function extractIssuesFromSheet(issueSpreadsheet){
             "number":issueNum,
             "info":issueInfo
         };
-        allIssue.push(issue);
+        allIssueObjects.push(issue);
     }
     return allIssueObjects;
 }
