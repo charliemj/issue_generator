@@ -54,7 +54,6 @@ function Volume(ss, templates){
         sectionFolder = this.sectionFolders[sectionName];
         sectionFolder.makeAllIssuesInSection();
     }
-
 }
 
 //precondition: issueSpreadsheet has 3 columns in this order: issueDate, issueNumber, issueNotes
