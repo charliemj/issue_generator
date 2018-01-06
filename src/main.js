@@ -9,6 +9,7 @@ function main(){
     var inshortTemplate = DriveApp.getFilesByName("inshort_template").next();
     var sportsBlitzTemplate = DriveApp.getFilesByName("sports_blitz_template").next();
 
+    //package them nicely :)
     var templates = {
         "eicIssueSheet":eicIssueSpreadsheetTemplate,
         "sectionIssueSheet": sectionIssueSpreadsheet,
@@ -19,12 +20,12 @@ function main(){
 
     var volume = new Volume(ss, templates);
     var eicSheet = volume.eic_copy_sheet;
-    //Make triggers
-    //Note: We are limited to having 20 triggers per script
 
 
+//Make triggers
+//Note: We are limited to having 20 triggers per script
 
- function pullFromSectionWithParams(issueNum,volume, eicIssueSheet){
+    function pullFromSectionWithParams(issueNum,volume, eicIssueSheet){
         //Will is a dictionary mapping issueNum {Strings}: [[spreadsheet, section],[spreadsheet, section]]
         var allSheetsByIssue = volume.allSheetsByIssue;
 
@@ -73,12 +74,10 @@ function main(){
 
 
     function triggerFunction(){
-
         for(var i in allIssueObjects){
             num = allIssueObjects.number;
             pullFromSectionWithParams(issueNum, volume, eicSheet);
         }
-
     }
 
     //Make "onOpen" trigger
@@ -92,7 +91,6 @@ function main(){
           .timeBased()
           .everyMinutes(5)
           .create();
-
 }
 
 
