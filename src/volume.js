@@ -3,33 +3,31 @@ function Volume(ss, templates){
     this.issueSheet = ss.getSheetByName("issues");
     this.sectionsSheet = ss.getSheetByName("sections");
     this.configSheet =  ss.getSheetByName("config");
-
     this.templates = templates;
 
     //this is magic-numbered such that the spreadsheet ID is
     //in the 1,2 position of the sheet
     var volumeNumber_root = this.configSheet.getSheetValues(1,1,2,2)[0][1];
-    this.volumeNumber = volumeNumber_root.replace("_root", "");//extract just the volume number
+    this.volumeNumber = volumeNumber_root.replace("_root", "");//extract just the volume number (I name this with _root to avoid potential clashes with other "V138"-named folders/files)
 
     //creates and returns list of issue objects
     var allIssueObjects = extractIssuesFromSheet(this.issueSheet);
-
+    this.allIssueObjects = allIssueObjects;
     //Will be a dictionary mapping issueNum {Strings}: [[spreadsheet, section],[spreadsheet, section]]
     this.allSheetsByIssue = {};
 
     for(var ii = 0; ii<allIssueObjects.length; ii++){
         //populate the issue dict with an empty list for each issue number
-        this.allSheetsByIssue[allIssueObjects[ii].number] = []; //BUG this.allSheetsByIssue[allIssueObjects.number] is undefined
+        this.allSheetsByIssue[allIssueObjects[ii].number] = [];
     }
 
     //returns list of departments as strings
     var sections = this.sectionsSheet.getSheetValues(1,1,this.sectionsSheet.getLastRow(),1);
 
-    Logger.log("Sections are: "+sections);
-    this.volumeFolder = DriveApp.getFoldersByName(this.volumeNumber+"_root").next(); //get volumeNumber_root from config sheet
+    this.volumeFolder = DriveApp.getFoldersByName(this.volumeNumber+"_root").next();
 
     /**
-     * Creates and returns a Folder placed in the Volume Folder
+     * Creates and returns a Section Folder and places it into the Volume Folder
      * @param  {Folder} volumeFolder   the Volume folder
      * @param  {String} sectionName the new folder's name
      * @return the new Folder
@@ -38,12 +36,12 @@ function Volume(ss, templates){
         return volumeFolder.createFolder(sectionName);
     };
 
-    //fill Volume folder with Section Folders for each section (including eic_copy)
+    //fill Volume folder with Section Folders for each section
     this.sectionFolders = {};
     for (var i in sections){
         var sectionName = sections[i];
-        var sect = new Section(this, sectionName);
-        this.sectionFolders[sectionName] = sect;
+        var sectionObject = new Section(this, sectionName);
+        this.sectionFolders[sectionName] = sectionObject;
     }
 
     //make the eicCopy master sheet
@@ -51,9 +49,9 @@ function Volume(ss, templates){
 
     //populate sectionFolders
     for (var j in sections){
-        sectionName = sections[j];
-        sectionFolder = this.sectionFolders[sectionName];
-        sectionFolder.makeAllIssuesInSection();
+        var sectionName = sections[j];
+        var sectionObject = this.sectionFolders[sectionName];
+        sectionObject.makeAllIssuesInSection();
     }
 }
 

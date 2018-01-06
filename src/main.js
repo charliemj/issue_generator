@@ -8,6 +8,7 @@ function main(){
     var sectionPhotoSpreadsheet = DriveApp.getFilesByName("section_photo_spreadsheet_template").next();
     var inshortTemplate = DriveApp.getFilesByName("inshort_template").next();
     var sportsBlitzTemplate = DriveApp.getFilesByName("sports_blitz_template").next();
+    var issueNotesTemplate = DriveApp.getFilesByName("issue_notes_template").next();
 
     //package them nicely :)
     var templates = {
@@ -15,7 +16,8 @@ function main(){
         "sectionIssueSheet": sectionIssueSpreadsheet,
         "sectionPhotoSheet":sectionPhotoSpreadsheet,
         "inshort":inshortTemplate,
-        "sportsBlitz":sportsBlitzTemplate
+        "sportsBlitz":sportsBlitzTemplate,
+        "issueNotes":issueNotesTemplate
     };
 
     var volume = new Volume(ss, templates);

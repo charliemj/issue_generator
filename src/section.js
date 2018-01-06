@@ -7,11 +7,12 @@ function Section(volume, sectionName){
         var allIssueFolders = [];
         for(var i in volume.allIssueObjects){
             var issue = volume.allIssueObjects[i];
-            var sectionIssueFolder = new issueFolder(this, issue, volume);
+            var sectionIssueFolder = IssueFolder(this, issue, volume);
             allIssueFolders.push(sectionIssueFolder);
         }
         return allIssueFolders;
     };
 
+    //Logger.log("Trying to make issue folders....");
     this.allSectionIssueFolders = this.makeAllIssuesInSection();
 }
