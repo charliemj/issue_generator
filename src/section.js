@@ -13,5 +13,5 @@ function Section(volume, sectionName){
         return allIssueFolders;
     };
 
-    this.allSectionIssueFolders = makeAllIssuesInSection();
+    this.allSectionIssueFolders = this.makeAllIssuesInSection();
 }
