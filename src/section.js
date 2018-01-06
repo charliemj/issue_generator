@@ -2,7 +2,7 @@ function Section(volume, sectionName){
     this.sectionName = sectionName;
     this.sectionFolder = volume.makeFolderInVolume(volume.volumeFolder, this.sectionName);
 
-    var makeAllIssuesInSection = function(){
+    this.makeAllIssuesInSection = function(){
         //makes a sectionIssueFolder for each issue
         var allIssueFolders = [];
         for(var i in allIssueObjects){

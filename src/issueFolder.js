@@ -7,7 +7,7 @@ function IssueFolder (Section, issue, volume){
     this.Section = Section;
 
     function makeIssueFolder(){
-        return this.Section.createFolder(this.issueNum);
+        return this.Section.sectionFolder.createFolder(this.issueNum);
     }
 
     this.issueFolder = makeIssueFolder();

@@ -1,8 +1,9 @@
 function main(){
-    var ss = SpreadsheetApp.getActiveSpreadsheet(); //gets the SpreadSheet this script is attached to
+    //the URL of the Master Sheet
+    var ss = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/1O7fhTRFU7hp2WhzvhQ90UZek0VNDMKciy66tP1JTPwE/edit#gid=0");
 
     //Get templates
-    var eicIssueSpreadsheetTemplate = DriveApp.getFilesByName("eic_sheet_template").next(); //the master spreadsheet
+    var eicIssueSpreadsheetTemplate = DriveApp.getFilesByName("eic_sheet_template").next();
     var sectionIssueSpreadsheet = DriveApp.getFilesByName("section_spreadsheet_template").next();
     var sectionPhotoSpreadsheet = DriveApp.getFilesByName("section_photo_spreadsheet_template").next();
     var inshortTemplate = DriveApp.getFilesByName("inshort_template").next();
@@ -16,23 +17,19 @@ function main(){
         "sportsBlitz":sportsBlitzTemplate
     };
 
-    var volume = new Volume(ss);
-
+    var volume = new Volume(ss, templates);
+    var eicSheet = volume.eic_copy_sheet;
     //Make triggers
     //Note: We are limited to having 20 triggers per script
 
-    var ssForTrigger = SpreadsheetApp.getActive();//get by issue?
-    var activeSheetForTrigger = ssForTrigger.getActiveSheet();
-    var issueNumberActive = activeSheetForTrigger.getSheetName();
 
-    function pullFromSectionWithParams(issueNumberActive,volume){
+
+ function pullFromSectionWithParams(issueNum,volume, eicIssueSheet){
         //Will is a dictionary mapping issueNum {Strings}: [[spreadsheet, section],[spreadsheet, section]]
         var allSheetsByIssue = volume.allSheetsByIssue;
 
         //go through each Section, go to the issue number of the active sheet's issue
-        thisIssueSheets = allSheetsByIssue.issueNumberActive; //format: [[spreadsheet, section],[spreadsheet, section]]
-
-        var eicIssueSheet = activeSheetForTrigger;
+        thisIssueSheets = allSheetsByIssue.issueNum; //format: [[spreadsheet, section],[spreadsheet, section]]
 
         //go through each section + its sheet for a given issue
         for (var s = 0; s < thisIssueSheets.length; s++){
@@ -74,24 +71,30 @@ function main(){
         return eicSheet.getLastRow();
     }
 
+
     function triggerFunction(){
-      pullFromSectionWithParams(issueNumberActive, volume);
+
+        for(var i in allIssueObjects){
+            num = allIssueObjects.number;
+            pullFromSectionWithParams(issueNum, volume, eicSheet);
+        }
+
     }
 
     //Make "onOpen" trigger
     ScriptApp.newTrigger('triggerFunction')
-      .forSpreadsheet(eicIssueSheet)
+      .forSpreadsheet(eicSheet)
       .onOpen()
       .create();
 
     //Make timed trigger
     ScriptApp.newTrigger('triggerFunction')
-          .forSpreadsheet(eicIssueSheet)
           .timeBased()
           .everyMinutes(5)
           .create();
 
 }
+
 
 
 //Resources used:

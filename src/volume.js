@@ -1,12 +1,14 @@
-function Volume(ss){
+function Volume(ss, templates){
     //gets Sheets
     this.issueSheet = ss.getSheetByName("issues");
     this.sectionsSheet = ss.getSheetByName("sections");
     this.configSheet =  ss.getSheetByName("config");
 
+    this.templates = templates;
+
     //this is magic-numbered such that the spreadsheet ID is
     //in the 1,2 position of the sheet
-    var volumeNumber_root = configSheet.getSheetValues(1,1,1,1)[0][1];
+    var volumeNumber_root = this.configSheet.getSheetValues(1,1,2,2)[0][1];
     this.volumeNumber = volumeNumber_root.replace("_root", "");//extract just the volume number
 
     //creates and returns list of issue objects
@@ -23,8 +25,7 @@ function Volume(ss){
     //returns list of departments as strings
     var sections = this.sectionsSheet.getSheetValues(1,1,this.sectionsSheet.getLastRow(),1)[0];
 
-    //creates and returns the volumeFolder object
-    this.volumeFolder = DriveApp.getFoldersByName(this.volumeNumber).next(); //get volumeNumber_root from config sheet
+    this.volumeFolder = DriveApp.getFoldersByName(this.volumeNumber+"_root").next(); //get volumeNumber_root from config sheet
 
     /**
      * Creates and returns a Folder placed in the Volume Folder
@@ -45,7 +46,7 @@ function Volume(ss){
     }
 
     //make the eicCopy master sheet
-    this.eic_copy_sheet = new EicCopySheet(this);
+    this.eic_copy_sheet = EicCopySheet(this);
 
     //populate sectionFolders
     for (var j in sections){
@@ -75,11 +76,11 @@ function extractIssuesFromSheet(issueSpreadsheet){
     var allIssueObjects = [];
 
     //extract all issues and make Issue objects
-    for (var row = 1; row <= numRows; row++){
+    for (var row = 0; row < numRows-1; row++){
         //each row is an issue
-        var issueDate = allIssuesInfo[row][1];
-        var issueNum = allIssuesInfo[row][2];
-        var issueInfo = allIssuesInfo[row][3];
+        var issueDate = allIssuesInfo[row][0];
+        var issueNum = allIssuesInfo[row][1];
+        var issueInfo = allIssuesInfo[row][2];
         //create Issue object
         var issue = {
             "date":issueDate,

@@ -18,4 +18,6 @@ function EicCopySheet(volume){
         //i+1 because the 0th sheet is the template sheet
         eicCopySheet.insertSheet(issueNum, i+1, {template: templateSheet}); //insertSheet(sheetName, sheetIndex)
     }
+
+    return eicCopySheet;
 }
