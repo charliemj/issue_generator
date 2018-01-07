@@ -6,9 +6,9 @@
  * @param  {Folder} issueFolder the issue folder the inshorts will be placed in
  * @return returns nothing
  */
-function makeInshorts(volume, issueNum, issueFolder, newsSheet){
+function makeInshorts(volume, name, issueFolder, newsSheet){
     //makes a new Inshorts doc for the issue and puts it in the issue folder
-    var inshorts = volume.templates.inshort.makeCopy(issueNum+"_Inshorts", issueFolder);
+    var inshorts = volume.templates.inshort.makeCopy(name, issueFolder);
     inshorts.setSharing(DriveApp.Access.ANYONE, DriveApp.Permission.EDIT); //anyone with the link can edit
     //write the editable link to the news spreadsheet
     newsSheet.insertRowAfter(1);
@@ -28,8 +28,8 @@ function makeInshorts(volume, issueNum, issueFolder, newsSheet){
  * @param  {Folder} issueFolder the issue folder the sportsblitz will be placed in
  * @return returns nothing
  */
-function makeSportsBlitz(volume, issueNum, issueFolder, sportsSheet){
-    var sportsBlitz = volume.templates.sportsBlitz.makeCopy(issueNum+"_SportsBlitz", issueFolder);
+function makeSportsBlitz(volume, name, issueFolder, sportsSheet){
+    var sportsBlitz = volume.templates.sportsBlitz.makeCopy(name, issueFolder);
     sportsBlitz.setSharing(DriveApp.Access.ANYONE, DriveApp.Permission.EDIT); //anyone with the link can edit
     //write the editable link in the sports spreadsheet
     sportsSheet.insertRowAfter(1);

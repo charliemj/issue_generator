@@ -1,5 +1,10 @@
 function EicCopySheet(volume){
     //make EicCopySheet
+
+    name = "EIC Copy Sheet for "+volume.volumeNumber;
+    sheet = volume.volumeFolder.getFilesByName(name);
+    if (sheet.hasNext()){return sheet.next();}
+
     eicCopySheet = volume.templates.eicIssueSheet.makeCopy("EIC Copy Sheet for "+volume.volumeNumber, volume.volumeFolder);
     eicCopySheet.setSharing(DriveApp.Access.ANYONE, DriveApp.Permission.EDIT); //anyone with link can edit
 

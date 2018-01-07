@@ -9,14 +9,24 @@ function IssueFolder(Section, issue, volume){
 
     function makeIssueFolder(){
         //in the section Folder, create a Folder with the name this.issueNum
+        folders = this.sectionFolder.getFoldersByName(this.issueNum);
+
+        //it is already made
+        if (folders.hasNext()){return folders.next();}
+
         return this.sectionFolder.createFolder(this.issueNum);
     }
 
     this.issueFolder = makeIssueFolder();
 
     function makeIssueSheet(issueNum,sectionName,issueFolder){
+        name = issueNum+"_"+sectionName;
+        sheets = issueFolder.getFilesByName(name);
 
-        sectionSheet = volume.templates.sectionIssueSheet.makeCopy(issueNum+"_"+sectionName, issueFolder);
+        //it's already made
+        if (sheets.hasNext()){return sheets.next();}
+
+        sectionSheet = volume.templates.sectionIssueSheet.makeCopy(name, issueFolder);
         sectionSheet.setSharing(DriveApp.Access.ANYONE, DriveApp.Permission.EDIT); //anyone with link can edit
 
         //updates the Volumes allSheetsByIssue dict with this sections issueNum sheet
@@ -26,7 +36,13 @@ function IssueFolder(Section, issue, volume){
     }
 
     function makeSectionPhotoSpreadsheet(issueNum, section, issueFolder){
-        photoSheet = volume.templates.sectionPhotoSheet.makeCopy(issueNum+" photo spreadsheet for "+section, issueFolder);
+        name = issueNum+" photo spreadsheet for "+section;
+        sheets = issueFolder.getFilesByName(name);
+
+        //it's already made
+        if (sheets.hasNext()){return sheets.next();}
+
+        photoSheet = volume.templates.sectionPhotoSheet.makeCopy(name, issueFolder);
         photoSheet.setSharing(DriveApp.Access.ANYONE, DriveApp.Permission.EDIT); //anyone with link can edit
         return photoSheet;
     }
@@ -35,27 +51,15 @@ function IssueFolder(Section, issue, volume){
     this.sectionIssueSheet = makeIssueSheet(this.issueNum, this.sectionName, this.issueFolder);
     this.makeSectionPhotoSpreadsheet = makeSectionPhotoSpreadsheet(this.issueNum, this.sectionName, this.issueFolder);
 
-    // function makeIssueNotesDoc(volume, content, issueNum, issueFolder){
-    //     //takes the issue notes as input and creates a doc titled
-    //     //"issueNum Issue Notes" and puts it in the folder
-    //     var name = issueNum+" special notes";
-    //     issueNotesDoc = DocumentApp.create(name);
-    //     var header = this.issueNum + " will be published on " + this.issueDate+"\n";
-    //     issueNotesDoc.appendParagraph(header);
-    //     issueNotesDoc.appendParagraph(content+"\n");
-
-    //     //transform the Document into a Blob that DriveApp can work with
-    //     issueNotesDoc = issueNotesDoc.getBlob();
-
-    //     txtcontent = header + content;
-    //     //Creates a file in the issueFolder of the issue notes
-    //     fileIssueNotesDoc = DriveApp.issueFolder.createFile(name, txtcontent);//https://developers.google.com/apps-script/reference/drive/folder#createFile(BlobSource)
-
-
-    // }
 
     function makeIssueNotesDoc(volume, issue, issueFolder){
         var name = issue.number+" special notes";
+
+        docs = issueFolder.getFilesByName(name);
+
+        //it's already made
+        if (docs.hasNext()){return}
+
         var header = issue.number + " will be published on " + issue.date+"\n";
         issueNotes = volume.templates.issueNotes.makeCopy(name, issueFolder);
         issueNotes.setContent(header+"\n"+issue.info+"\n");
@@ -66,10 +70,25 @@ function IssueFolder(Section, issue, volume){
 
     //Add any section specific additions to the folder
     if(this.sectionName == "sports"){
-        makeSportsBlitz(volume, "Sports Blitz for "+this.issueNum, this.issueFolder, SpreadsheetApp.open(this.sectionIssueSheet));
+        name = "Sports Blitz for "+this.issueNum;
+
+        blitz = this.issueFolder.getFilesByName(name);
+        //it's already made
+
+        if (blitz.hasNext()){}
+        else{
+            makeSportsBlitz(volume, name, this.issueFolder, SpreadsheetApp.open(this.sectionIssueSheet));
+        }
     }
 
     if(this.sectionName == "news"){
-        makeInshorts(volume,"Inshorts for "+this.issueNum, this.issueFolder, SpreadsheetApp.open(this.sectionIssueSheet));
+        name = "Inshorts for "+this.issueNum;
+        inshorts = this.issueFolder.getFilesByName(name);
+        //it's already made
+
+        if (inshorts.hasNext()){}
+        else{
+            makeInshorts(volume, name, this.issueFolder, SpreadsheetApp.open(this.sectionIssueSheet));
+        }
     }
 }

@@ -97,10 +97,10 @@ function main(){
 //      .create();
 
     //Make timed trigger
-    ScriptApp.newTrigger('triggerFunction')
-          .timeBased()
-          .everyMinutes(5)
-          .create();
+    // ScriptApp.newTrigger('triggerFunction')
+    //       .timeBased()
+    //       .everyMinutes(5)
+    //       .create();
 
 //  ScriptApp.newTrigger('triggerFunction2')
 //          .timeBased()

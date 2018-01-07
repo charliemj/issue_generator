@@ -33,6 +33,11 @@ function Volume(ss, templates){
      * @return the new Folder
     */
     this.makeFolderInVolume = function(volumeFolder, sectionName){
+        folders = volumeFolder.getFoldersByName(sectionName);
+
+        //it is already made
+        if (folders.hasNext()){return folders.next();}
+
         return volumeFolder.createFolder(sectionName);
     };
 
@@ -45,6 +50,7 @@ function Volume(ss, templates){
     }
 
     //make the eicCopy master sheet
+
     this.eic_copy_sheet = EicCopySheet(this);
 
     //populate sectionFolders
