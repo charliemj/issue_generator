@@ -5,7 +5,7 @@ function triggerFunction (){
         }
     }
 
-function startVol(){
+function startVolume(){
   //the URL of the Master Sheet
   var ss = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/1O7fhTRFU7hp2WhzvhQ90UZek0VNDMKciy66tP1JTPwE/edit#gid=0");
 
@@ -31,7 +31,7 @@ function startVol(){
   return volume;
 }
 
-volume = startVol();
+volume = startVolume();
 var eicSheet = volume.eic_copy_sheet;
 //Make triggers
 //Note: We are limited to having 20 triggers per script
@@ -85,27 +85,12 @@ function findSectionRowInEicSheet(sectionName, eicSheet){
 
 function main(){
 
-    //Make "onOpen" trigger
+    //Make "onOpen" trigger (also seems to work on refresh!)
     ScriptApp.newTrigger('triggerFunction')
       .forSpreadsheet(eicSheet)
       .onOpen()
       .create();
 
-//    ScriptApp.newTrigger('triggerFunction2')
-//      .forSpreadsheet(eicSheet)
-//      .onOpen()
-//      .create();
-
-    //Make timed trigger
-    // ScriptApp.newTrigger('triggerFunction')
-    //       .timeBased()
-    //       .everyMinutes(5)
-    //       .create();
-
-//  ScriptApp.newTrigger('triggerFunction2')
-//          .timeBased()
-//          .everyMinutes(1)
-//          .create();
 }
 
 
