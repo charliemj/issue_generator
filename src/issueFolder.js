@@ -26,13 +26,13 @@ function IssueFolder(Section, issue, volume){
         //it's already made
         if (sheets.hasNext()){return sheets.next();}
 
-        sectionSheet = volume.templates.sectionIssueSheet.makeCopy(name, issueFolder);
+        this.sectionSheet = volume.templates.sectionIssueSheet.makeCopy(name, issueFolder);
         sectionSheet.setSharing(DriveApp.Access.ANYONE, DriveApp.Permission.EDIT); //anyone with link can edit
 
         //updates the Volumes allSheetsByIssue dict with this sections issueNum sheet
         volume.allSheetsByIssue[issueNum].push([sectionSheet,sectionName]);
 
-        return sectionSheet;
+        return this.sectionSheet;
     }
 
     function makeSectionPhotoSpreadsheet(issueNum, section, issueFolder){

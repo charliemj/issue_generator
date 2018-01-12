@@ -10,28 +10,9 @@ function Volume(ss, templates){
     var volumeNumber_root = this.configSheet.getSheetValues(1,1,2,2)[0][1];
     this.volumeNumber = volumeNumber_root.replace("_root", "");//extract just the volume number (I name this with _root to avoid potential clashes with other "V138"-named folders/files)
 
-    //creates and returns list of issue objects
-    var allIssueObjects = extractIssuesFromSheet(this.issueSheet);
-    this.allIssueObjects = allIssueObjects;
-    //Will be a dictionary mapping issueNum {Strings}: [[spreadsheet, section],[spreadsheet, section]]
-    this.allSheetsByIssue = {};
-
-    for(var ii = 0; ii<allIssueObjects.length; ii++){
-        //populate the issue dict with an empty list for each issue number
-        this.allSheetsByIssue[allIssueObjects[ii].number] = [];
-    }
-
-    //returns list of departments as strings
-    var sections = this.sectionsSheet.getSheetValues(1,1,this.sectionsSheet.getLastRow(),1);
-
     this.volumeFolder = DriveApp.getFoldersByName(this.volumeNumber+"_root").next();
 
-    /**
-     * Creates and returns a Section Folder and places it into the Volume Folder
-     * @param  {Folder} volumeFolder   the Volume folder
-     * @param  {String} sectionName the new folder's name
-     * @return the new Folder
-    */
+
     this.makeFolderInVolume = function(volumeFolder, sectionName){
         folders = volumeFolder.getFoldersByName(sectionName);
 
@@ -40,14 +21,49 @@ function Volume(ss, templates){
 
         return volumeFolder.createFolder(sectionName);
     };
+     //returns list of departments as strings
+    var sections = this.sectionsSheet.getSheetValues(1,1,this.sectionsSheet.getLastRow(),1);
 
     //fill Volume folder with Section Folders for each section
-    this.sectionFolders = {};
+    this.sectionFolders = {}; //I'm calling this before I have allIssueObjects, which is wrong, I really need
+    //to make some functions....
     for (var i in sections){
         var sectionName = sections[i];
+      //Logger.log(sectionName);
         var sectionObject = new Section(this, sectionName);
         this.sectionFolders[sectionName] = sectionObject;
     }
+
+  //Logger.log(this.sectionFolders);
+
+  //creates and returns list of issue objects
+    var allIssueObjects = extractIssuesFromSheet(this.issueSheet);
+    this.allIssueObjects = allIssueObjects;
+    //Will be a dictionary mapping issueNum {Strings}: [[spreadsheet, section],[spreadsheet, section]]
+    this.allSheetsByIssue = {};
+
+
+
+    for(var ii = 0; ii<allIssueObjects.length; ii++){
+        //populate the issue dict with an empty list for each issue number
+        this.allSheetsByIssue[allIssueObjects[ii].number] = []; //so this list is never being populated...
+        thisIssue = this.allSheetsByIssue[allIssueObjects[ii].number];
+        for(var secIndex in sections){
+            var dept = sections[secIndex];
+
+            //relies on this iterating over issues in order
+            //var issueNumInt = precisionRound(parseInt(allIssueObjects[ii].number.replace("N","")),-1);
+
+          //Logger.log(this.sectionFolders[dept]);
+            var deptSheet = this.sectionFolders[dept].allSectionIssuesFolder[ii+1].sectionIssueSheet;
+        }
+        //what was the plan here?derp
+        //I thihnk
+        //want to go to each section and get sheets for that issue
+    }
+
+
+
 
     //make the eicCopy master sheet
 

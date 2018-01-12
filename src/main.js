@@ -1,9 +1,20 @@
 function triggerFunction (){
         for(var i in volume.allIssueObjects){
-            issueNum = allIssueObjects[i].number;
+            issueNum = volume.allIssueObjects[i].number;
+            Logger.log(issueNum,volume, eicSheet);
             pullFromSectionWithParams(issueNum, volume, eicSheet);
         }
     }
+
+
+// function triggerFunction (){
+//   MailApp.sendEmail("kjmoore@mit.edu", "I work", "out sometimes");
+// //        for(var i in volume.allIssueObjects){
+// //            issueNum = allIssueObjects[i].number;
+// //            pullFromSectionWithParams(issueNum, volume, eicSheet);
+// //        }
+//     }
+
 
 function startVolume(){
   //the URL of the Master Sheet
@@ -74,7 +85,7 @@ function findSectionRowInEicSheet(sectionName, eicSheet){
     var firstColumn = eicSheet.getRange(startRow, column, numRows).getValues();
 
     for(var rowNum in firstColumn){
-        if(firstColumn[rowNum][0] == sectionName){
+        if(firstColumn[rowNum][0].toLowerCase() == sectionName.toLowerCase()){
         return rowNum;
         }
     }
