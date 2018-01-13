@@ -1,6 +1,6 @@
 function triggerFunction (){
         for(var i in volume.allIssueObjects){
-            issueNum = volume.allIssueObjects[i].number;
+            issueNum = volume.allIssueObjects[i].num;
             Logger.log(issueNum,volume, eicSheet);
             pullFromSectionWithParams(issueNum, volume, eicSheet);
         }

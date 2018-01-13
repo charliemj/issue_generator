@@ -5,76 +5,65 @@ function Volume(ss, templates){
     this.configSheet =  ss.getSheetByName("config");
     this.templates = templates;
 
-    //this is magic-numbered such that the spreadsheet ID is
-    //in the 1,2 position of the sheet
+    //this is magic-numbered such that the spreadsheet ID is in the 1,2 position of the sheet
     var volumeNumber_root = this.configSheet.getSheetValues(1,1,2,2)[0][1];
     this.volumeNumber = volumeNumber_root.replace("_root", "");//extract just the volume number (I name this with _root to avoid potential clashes with other "V138"-named folders/files)
-
     this.volumeFolder = DriveApp.getFoldersByName(this.volumeNumber+"_root").next();
 
+    //returns list of sections as strings
+    var sections = this.sectionsSheet.getSheetValues(1,1,this.sectionsSheet.getLastRow(),1);
 
+    //creates and returns list of issue objects
+    var allIssueObjects = extractIssuesFromSheet(this.issueSheet);
+    this.allIssueObjects = allIssueObjects; //can I delete the line above?
+
+    var numberOfIssues = allIssueObjects.length;
+
+    //why is this a Volume method?
     this.makeFolderInVolume = function(volumeFolder, sectionName){
         folders = volumeFolder.getFoldersByName(sectionName);
-
         //it is already made
         if (folders.hasNext()){return folders.next();}
-
         return volumeFolder.createFolder(sectionName);
     };
-     //returns list of departments as strings
-    var sections = this.sectionsSheet.getSheetValues(1,1,this.sectionsSheet.getLastRow(),1);
+
 
     //fill Volume folder with Section Folders for each section
     this.sectionFolders = {}; //I'm calling this before I have allIssueObjects, which is wrong, I really need
-    //to make some functions....
+    //to make some helper functions....
     for (var i in sections){
         var sectionName = sections[i];
-      //Logger.log(sectionName);
+        //make a Section for that sectionName
         var sectionObject = new Section(this, sectionName);
         this.sectionFolders[sectionName] = sectionObject;
     }
 
-  //Logger.log(this.sectionFolders);
+    //**Must run after all Sections are created**
+    //Returns a dictionary mapping issueNum {Strings}: [[spreadsheet, section],[spreadsheet, section]]
+    function getAllSheetsByIssue(numberOfIssues, volume){
+        var allSheetsByIssue = {};
+        for(var i = 1; i<=numberOfIssues; i++){
+            //populate the issue dict with an empty list for each issue number
+            allSheetsByIssue[i] = []; //this names the issues "1" instead of "N1"
 
-  //creates and returns list of issue objects
-    var allIssueObjects = extractIssuesFromSheet(this.issueSheet);
-    this.allIssueObjects = allIssueObjects;
-    //Will be a dictionary mapping issueNum {Strings}: [[spreadsheet, section],[spreadsheet, section]]
-    this.allSheetsByIssue = {};
-
-
-
-    for(var ii = 0; ii<allIssueObjects.length; ii++){
-        //populate the issue dict with an empty list for each issue number
-        this.allSheetsByIssue[allIssueObjects[ii].number] = []; //so this list is never being populated...
-        thisIssue = this.allSheetsByIssue[allIssueObjects[ii].number];
-        for(var secIndex in sections){
-            var dept = sections[secIndex];
-
-            //relies on this iterating over issues in order
-            //var issueNumInt = precisionRound(parseInt(allIssueObjects[ii].number.replace("N","")),-1);
-
-          //Logger.log(this.sectionFolders[dept]);
-            var deptSheet = this.sectionFolders[dept].allSectionIssuesFolder[ii+1].sectionIssueSheet;
+            //fill allSheetsByIssue[i] list with the sheets for each section
+            for(var secIndex in sections){
+                var sectionName = sections[secIndex];
+                var sectionFolder= volume.sectionSectionFolders[sectionName];
+                var sectionIssueFolder = sectionFolder.allSectionIssueFolders[i];
+                var sectionIssueSheet = sectionIssueFolder.sectionIssueSheet;
+                allSheetsByIssue[i].push([sectionIssueSheet, sectionName]);
+            }
         }
-        //what was the plan here?derp
-        //I thihnk
-        //want to go to each section and get sheets for that issue
+        return allSheetsByIssue;
     }
 
-
+    this.allSheetsByIssue = getAllSheetsByIssue(numberOfIssues, this);
 
 
     //make the eicCopy master sheet
-
     this.eic_copy_sheet = EicCopySheet(this);
 
-    //populate sectionFolders
-    for (var j in sections){
-        var sectionName = sections[j];
-        var sectionObject = this.sectionFolders[sectionName];
-        sectionObject.makeAllIssuesInSection();
-    }
 }
 
 //precondition: issueSpreadsheet has 3 columns in this order: issueDate, issueNumber, issueNotes
@@ -104,7 +93,7 @@ function extractIssuesFromSheet(issueSpreadsheet){
         //create Issue object
         var issue = {
             "date":issueDate,
-            "number":issueNum,
+            "num":issueNum,
             "info":issueInfo
         };
         allIssueObjects.push(issue);

@@ -1,6 +1,6 @@
 function IssueFolder(Section, issue, volume){
     this.issue = issue;
-    this.issueNum = issue.number;
+    this.issueNum = issue.num;
     this.issueDate = issue.date;
     this.issueInfo = issue.info;
     this.sectionName = Section.sectionName;
@@ -26,13 +26,13 @@ function IssueFolder(Section, issue, volume){
         //it's already made
         if (sheets.hasNext()){return sheets.next();}
 
-        this.sectionSheet = volume.templates.sectionIssueSheet.makeCopy(name, issueFolder);
+        sectionSheet = volume.templates.sectionIssueSheet.makeCopy(name, issueFolder);
         sectionSheet.setSharing(DriveApp.Access.ANYONE, DriveApp.Permission.EDIT); //anyone with link can edit
 
         //updates the Volumes allSheetsByIssue dict with this sections issueNum sheet
         volume.allSheetsByIssue[issueNum].push([sectionSheet,sectionName]);
 
-        return this.sectionSheet;
+        return sectionSheet;
     }
 
     function makeSectionPhotoSpreadsheet(issueNum, section, issueFolder){
@@ -60,7 +60,7 @@ function IssueFolder(Section, issue, volume){
         //it's already made
         if (docs.hasNext()){return}
 
-        var header = issue.number + " will be published on " + issue.date+"\n";
+        var header = issue.num + " will be published on " + issue.date+"\n";
         issueNotes = volume.templates.issueNotes.makeCopy(name, issueFolder);
         issueNotes.setContent(header+"\n"+issue.info+"\n");
     }
