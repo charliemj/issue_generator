@@ -74,6 +74,7 @@ function Volume(ss, templates){
  * @return {List} allIssues  a list of issueObjects
  */
 function extractIssuesFromSheet(issueSpreadsheet){
+    Logger.log("start extractIssuesFromSheet");
     var startRow = 2;
     var startColumn = 1;
     var numRows = issueSpreadsheet.getLastRow();
@@ -98,5 +99,6 @@ function extractIssuesFromSheet(issueSpreadsheet){
         };
         allIssueObjects.push(issue);
     }
+    Logger.log("end extractIssuesFromSheet");
     return allIssueObjects;
 }

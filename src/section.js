@@ -1,4 +1,5 @@
 function Section(volume, sectionName){
+    Logger.log("start Section");
     this.sectionName = sectionName;
     this.sectionFolder = volume.makeFolderInVolume(volume.volumeFolder, this.sectionName);
 
@@ -10,7 +11,7 @@ function Section(volume, sectionName){
           //Logger.log(i);
             var issue = volume.allIssueObjects[i];
             var sectionIssueFolder = new IssueFolder(sectionName, sectionFolder, issue, volume);
-            Logger.log(sectionIssueFolder);
+            //Logger.log(sectionIssueFolder);
             allIssueFolders.push(sectionIssueFolder);
         }
         return allIssueFolders;
@@ -19,5 +20,5 @@ function Section(volume, sectionName){
     //Logger.log("Trying to make issue folders....");
 
     this.allSectionIssueFolders = makeAllIssuesInSection(this.sectionFolder, this.sectionName);
-    Logger.log(this.allSectionIssueFolders);
+    Logger.log("end Section");
 }

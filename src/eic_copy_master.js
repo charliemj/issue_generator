@@ -1,6 +1,6 @@
 function EicCopySheet(volume){
     //make EicCopySheet
-
+    Logger.log("start EicCopySheet");
     name = "EIC Copy Sheet for "+volume.volumeNumber;
     sheet = volume.volumeFolder.getFilesByName(name);
     if (sheet.hasNext()){return SpreadsheetApp.open(sheet.next());}
@@ -25,6 +25,6 @@ function EicCopySheet(volume){
         //i+1 because the 0th sheet is the template sheet
         eicCopySheet.insertSheet("N"+issueNum, i+1, {template: templateSheet}); //insertSheet(sheetName, sheetIndex)
     }
-
+    Logger.log("end EicCopySheet");
     return eicCopySheet;
 }

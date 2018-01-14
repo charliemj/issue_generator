@@ -1,5 +1,6 @@
 
 function startVolume(){
+  Logger.log("start startVolume");
   //the URL of the Master Sheet
   var ss = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/1O7fhTRFU7hp2WhzvhQ90UZek0VNDMKciy66tP1JTPwE/edit#gid=0");
 
@@ -22,6 +23,7 @@ function startVolume(){
   };
 
   var volume = new Volume(ss, templates);
+  Logger.log("end startVolume");
   return volume;
 }
 
@@ -31,6 +33,7 @@ var eicSheet = volume.eic_copy_sheet;
 //Note: We are limited to having 20 triggers per script
 
 function pullFromSectionWithParams(issueNum,volume, eicIssueSheet){
+  Logger.log("start pullFromSectionWithParams");
     //Will is a dictionary mapping issueNum {Strings}: [[spreadsheet, section],[spreadsheet, section]]
     var allSheetsByIssue = volume.allSheetsByIssue;
 
@@ -84,10 +87,14 @@ function pullFromSectionWithParams(issueNum,volume, eicIssueSheet){
 
         eicRange.setValues(sheetContentsValues);
     }
+    Logger.log("end pullFromSectionWithParams");
+
      return sheetContents;
 }
 
 function getNextNonEmptyRow(issueNum, eicSheet, sectionRowIndexInEicSheet){
+  Logger.log("start getNextNonEmptyRow");
+
   var sheet = eicSheet.getSheetByName("N"+issueNum);
   var endOfSheet = sheet.getLastRow();
 
@@ -97,13 +104,16 @@ function getNextNonEmptyRow(issueNum, eicSheet, sectionRowIndexInEicSheet){
     var value = sheet.getDataRange().getValues(); //Object[][]
     var firstCol = value[row-1][0];
     if (firstCol != ""){
+      Logger.log("end getNextNonEmptyRow");
       return row;
     }
   }
+  Logger.log("end getNextNonEmptyRow");
   return null;
 }
 
 function findSectionRowInEicSheet(issueNumber, sectionName, eicSheet){
+    Logger.log("start findSectionRowInEicSheet");
     //find the section in the EIC sheet (getSheetValues of that sheet, search until we find the section name, keep track of index?)
     //getRange(row, column, numRows)
     var startRow = 1;
@@ -113,7 +123,7 @@ function findSectionRowInEicSheet(issueNumber, sectionName, eicSheet){
 
     for(var rowNum in firstColumn){
       if(firstColumn[rowNum][0].toLowerCase() == sectionName[0].toLowerCase()){
-
+        Logger.log("end findSectionRowInEicSheet");
         return parseInt(rowNum)+1;
       }
     }
@@ -123,6 +133,7 @@ function findSectionRowInEicSheet(issueNumber, sectionName, eicSheet){
 }
 
 function triggerFunction (){
+  Logger.log("start triggerFunction");
   //MailApp.sendEmail("kjmoore@mit.edu", "I've been triggered!'", volume);
   for(var i in volume.allIssueObjects){
 
@@ -131,6 +142,7 @@ function triggerFunction (){
       sheetContents = pullFromSectionWithParams(issueNum, volume, eicSheet);
       //MailApp.sendEmail("kjmoore@mit.edu", "test2", "lol");
   }
+  Logger.log("end triggerFunction");
   //MailApp.sendEmail("kjmoore@mit.edu", "I am contents", sheetContents);
 }
 
