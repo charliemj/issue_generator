@@ -29,8 +29,7 @@ function Volume(ss, templates){
 
 
     //fill Volume folder with Section Folders for each section
-    this.sectionFolders = {}; //I'm calling this before I have allIssueObjects, which is wrong, I really need
-    //to make some helper functions....
+    this.sectionFolders = {};
     for (var i in sections){
         var sectionName = sections[i];
         //make a Section for that sectionName
@@ -38,27 +37,28 @@ function Volume(ss, templates){
         this.sectionFolders[sectionName] = sectionObject;
     }
 
+
     //**Must run after all Sections are created**
     //Returns a dictionary mapping issueNum {Strings}: [[spreadsheet, section],[spreadsheet, section]]
-    function getAllSheetsByIssue(numberOfIssues, volume){
+    function getAllSheetsByIssue(numberOfIssues, sectionFolders){
         var allSheetsByIssue = {};
-        for(var i = 1; i<=numberOfIssues; i++){
+        for(var i = 0; i<numberOfIssues; i++){
             //populate the issue dict with an empty list for each issue number
-            allSheetsByIssue[i] = []; //this names the issues "1" instead of "N1"
+            allSheetsByIssue[i+1] = []; //this names the issues "1" instead of "N1"
 
             //fill allSheetsByIssue[i] list with the sheets for each section
             for(var secIndex in sections){
                 var sectionName = sections[secIndex];
-                var sectionFolder= volume.sectionSectionFolders[sectionName];
+                var sectionFolder = sectionFolders[sectionName];
                 var sectionIssueFolder = sectionFolder.allSectionIssueFolders[i];
                 var sectionIssueSheet = sectionIssueFolder.sectionIssueSheet;
-                allSheetsByIssue[i].push([sectionIssueSheet, sectionName]);
+                allSheetsByIssue[i+1].push([sectionIssueSheet, sectionName]);
             }
         }
         return allSheetsByIssue;
     }
 
-    this.allSheetsByIssue = getAllSheetsByIssue(numberOfIssues, this);
+    this.allSheetsByIssue = getAllSheetsByIssue(numberOfIssues, this.sectionFolders);
 
 
     //make the eicCopy master sheet
@@ -88,7 +88,7 @@ function extractIssuesFromSheet(issueSpreadsheet){
     for (var row = 0; row < numRows-1; row++){
         //each row is an issue
         var issueDate = allIssuesInfo[row][0];
-        var issueNum = allIssuesInfo[row][1];
+        var issueNum = allIssuesInfo[row][1].replace("N","");
         var issueInfo = allIssuesInfo[row][2];
         //create Issue object
         var issue = {

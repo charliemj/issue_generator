@@ -3,7 +3,7 @@ function EicCopySheet(volume){
 
     name = "EIC Copy Sheet for "+volume.volumeNumber;
     sheet = volume.volumeFolder.getFilesByName(name);
-    if (sheet.hasNext()){return sheet.next();}
+    if (sheet.hasNext()){return SpreadsheetApp.open(sheet.next());}
 
     eicCopySheet = volume.templates.eicIssueSheet.makeCopy("EIC Copy Sheet for "+volume.volumeNumber, volume.volumeFolder);
     eicCopySheet.setSharing(DriveApp.Access.ANYONE, DriveApp.Permission.EDIT); //anyone with link can edit
@@ -23,7 +23,7 @@ function EicCopySheet(volume){
     for(var i=0; i<allIssueNums.length; i++){
         issueNum = allIssueNums[i];
         //i+1 because the 0th sheet is the template sheet
-        eicCopySheet.insertSheet(issueNum, i+1, {template: templateSheet}); //insertSheet(sheetName, sheetIndex)
+        eicCopySheet.insertSheet("N"+issueNum, i+1, {template: templateSheet}); //insertSheet(sheetName, sheetIndex)
     }
 
     return eicCopySheet;
