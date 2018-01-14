@@ -47,31 +47,60 @@ function pullFromSectionWithParams(issueNum,volume, eicIssueSheet){
         var secName = section[1];
         //retrieve all contents
         //getRange(row, column, numRows, numColumns).getValues() ==> returns Object[][]
-      var nr = secSheet.getLastRow();
-      var nc = secSheet.getLastColumn();
+        var nr = secSheet.getLastRow()-1;
+        var nc = secSheet.getLastColumn();
+        if (nr == 0){//there is no content yet in the sheet
+          continue;
+        }
         sheetContents = secSheet.getSheets()[0].getRange(2,1,nr, nc);
         sheetContentsValues = sheetContents.getValues();
-
+        Logger.log(sheetContentsValues);
         var sectionRowIndexInEicSheet = findSectionRowInEicSheet("N"+issueNum, secName, eicIssueSheet);
-
-        //for each row that will need to be copied, insert a blank row
-        eicIssueSheet.insertRowsAfter(sectionRowIndexInEicSheet, sheetContentsValues.length);
-
-        //copyValuesToRange(destinationSheet, column, columnEnd, row, rowEnd)
-
-        //sheetContents.copyValuesToRange(eicIssueSheet.getSheetByName("N"+issueNum), 2, secSheet.getLastColumn()+1, startRow, endRow);
 
         var startRow = sectionRowIndexInEicSheet+1;
         var startCol = 2 ;
         var numRow = sheetContentsValues.length;
         var numCol = secSheet.getSheets()[0].getLastColumn();
         var eicRange = eicIssueSheet.getSheetByName("N"+issueNum).getRange(startRow,startCol, numRow, numCol);
+        Logger.log("%s, %s, %s, %s",2,1,nr,nc);
+        Logger.log("%s, %s, %s, %s",startRow, startCol, numRow, numCol);
 
-        var l = eicRange.getValues();
+        //clear the range so values can be updated (overwritten)
+        eicRange.clear();
+        var nextNonEmptyRowNum = getNextNonEmptyRow(issueNum, eicIssueSheet, sectionRowIndexInEicSheet);
+
+        if(nextNonEmptyRowNum != null){
+          //delete all rows between sectionRowIndexInEicSheet and nextNonEmptyRow exclusive
+          var startDel = sectionRowIndexInEicSheet+1;
+          var endDel = nextNonEmptyRowNum;
+          var howMany = endDel - startDel;
+          if(howMany > 0 ){
+            eicIssueSheet.getSheetByName("N"+issueNum).deleteRows(startDel, howMany);
+          }
+        }
+
+        //for each row that will need to be copied, insert a blank row
+        eicIssueSheet.getSheetByName("N"+issueNum).insertRowsAfter(sectionRowIndexInEicSheet, sheetContentsValues.length);
 
         eicRange.setValues(sheetContentsValues);
     }
      return sheetContents;
+}
+
+function getNextNonEmptyRow(issueNum, eicSheet, sectionRowIndexInEicSheet){
+  var sheet = eicSheet.getSheetByName("N"+issueNum);
+  var endOfSheet = sheet.getLastRow();
+
+  var start = sectionRowIndexInEicSheet +1;
+
+  for(var row = start; row<=endOfSheet; row++){
+    var value = sheet.getDataRange().getValues(); //Object[][]
+    var firstCol = value[row-1][0];
+    if (firstCol != ""){
+      return row;
+    }
+  }
+  return null;
 }
 
 function findSectionRowInEicSheet(issueNumber, sectionName, eicSheet){
@@ -84,12 +113,13 @@ function findSectionRowInEicSheet(issueNumber, sectionName, eicSheet){
 
     for(var rowNum in firstColumn){
       if(firstColumn[rowNum][0].toLowerCase() == sectionName[0].toLowerCase()){
-        return rowNum;
+
+        return parseInt(rowNum)+1;
       }
     }
     //this should never happen, but if there is no sectionName cell in the eicSheet,
     //the function will just return the index of the last row with content in the sheet
-    return eicSheet.getLastRow();
+    throw "This shouldn't happen";
 }
 
 function triggerFunction (){
